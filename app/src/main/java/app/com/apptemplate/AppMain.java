@@ -37,14 +37,25 @@ public class AppMain extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        if(AppConf.navigationType.equals("drawer")) {
+            mNavigationDrawerFragment = (NavigationDrawerFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+            mTitle = getTitle();
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+            // Set up the drawer.
+            mNavigationDrawerFragment.setUp(
+                    R.id.navigation_drawer,
+                    (DrawerLayout) findViewById(R.id.drawer_layout));
+        }
+        else if(AppConf.navigationType.equals("tab")){
+
+        }
+        else if(AppConf.navigationType.equals("viewpager")){
+
+        }
+        else if(AppConf.navigationType.equals("grid")){
+
+        }
     }
 
     @Override
