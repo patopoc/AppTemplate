@@ -13,4 +13,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="login_title">Iniciar Sesion</string>
+    <string name="login_user">Usuario</string>
+    <string name="login_pass">Contraseña</string>
+    <string name="login_btnLogin">Ingresar</string>
+    <string name="login_message"></string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

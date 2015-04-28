@@ -5,5 +5,5 @@ package app.com.apptemplate;
  */
 public class AppConf {
     public static String navigationType="drawer"; //drawer, tab, viewpager, grid
-
+    public static boolean acceptTwoPane=false;
 }

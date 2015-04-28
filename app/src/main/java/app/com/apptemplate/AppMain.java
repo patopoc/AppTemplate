@@ -5,22 +5,24 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+
+import app.com.apptemplate.interfaces.RedirectInterface;
+import app.com.apptemplate.modules.ModBlank;
+import app.com.apptemplate.modules.ModItemsMaster;
+import app.com.apptemplate.modules.ModLogin;
+import app.com.apptemplate.navigation.NavigationDrawerFragment;
 
 
 public class AppMain extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        RedirectInterface {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -38,14 +40,7 @@ public class AppMain extends ActionBarActivity
         setContentView(R.layout.activity_app_main);
 
         if(AppConf.navigationType.equals("drawer")) {
-            mNavigationDrawerFragment = (NavigationDrawerFragment)
-                    getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-            mTitle = getTitle();
-
-            // Set up the drawer.
-            mNavigationDrawerFragment.setUp(
-                    R.id.navigation_drawer,
-                    (DrawerLayout) findViewById(R.id.drawer_layout));
+            useNavigationDrawer();
         }
         else if(AppConf.navigationType.equals("tab")){
 
@@ -58,13 +53,60 @@ public class AppMain extends ActionBarActivity
         }
     }
 
+    public void useNavigationDrawer(){
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
+
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    public void redirectToLogin(int modPosition){
+        Fragment modLogin= new ModLogin();
+        Bundle args= new Bundle();
+        args.putInt("modPosition",modPosition);
+        modLogin.setArguments(args);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container,modLogin)
+                .commit();
+    }
+
+    public void redirectMod(int pos){
+        onNavigationDrawerItemSelected(pos);
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+
+        Fragment modFragment= null;
+        switch (position){
+            case 1:
+                modFragment= new ModBlank();
+                break;
+            case 2:
+                modFragment= new ModItemsMaster();
+                break;
+            default:
+                modFragment= new PlaceholderFragment().newInstance(position+1);
+                break;
+        }
+
+        if(modFragment != null){
+            Bundle args= new Bundle();
+            args.putInt("modPosition",position);
+            modFragment.setArguments(args);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, modFragment)
+                    .commit();
+        }
+
     }
 
     public void onSectionAttached(int number) {
