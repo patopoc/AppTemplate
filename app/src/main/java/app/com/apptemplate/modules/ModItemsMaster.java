@@ -12,13 +12,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import app.com.apptemplate.R;
 import app.com.apptemplate.adapters.PlacesAdapter;
+import app.com.apptemplate.adapters.RecyclerAdapter;
 import app.com.apptemplate.dummy.DummyData;
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.utils.DataProvider;
 import app.com.apptemplate.utils.RecyclerItemClickListener;
 import app.com.apptemplate.utils.SessionControl;
+import app.com.apptemplate.utils.StringClass;
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
@@ -64,7 +68,7 @@ public class ModItemsMaster extends Fragment {
     private SessionControl sessionControl;
     private RecyclerView mRecycleView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private PlacesAdapter mAdapter;
+    private RecyclerAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,16 +97,17 @@ public class ModItemsMaster extends Fragment {
 
         mLayoutManager= new LinearLayoutManager(getActivity());
         mRecycleView.setLayoutManager(mLayoutManager);
-        mAdapter= new PlacesAdapter(DummyData.data,mRecycleView);
-        DataProvider dataProvider= new DataProvider(mAdapter);
-        dataProvider.loadFromUrl("");
+        //mAdapter= new PlacesAdapter(DummyData.data,mRecycleView);
+        mAdapter= new RecyclerAdapter(mRecycleView);
+
+        DataProvider dataProvider= new DataProvider(getActivity(),mAdapter,new ArrayList<String>());
+        dataProvider.loadFromUrl("http://192.168.1.106/weservis.php","json");
         mRecycleView.setAdapter(mAdapter);
 
         mRecycleView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
                 new RecyclerItemClickListener.OnItemClickListener(){
                     @Override
                     public void onItemClick(View view, int pos){
-                        Log.d(TAG,"touched: "+DummyData.data[pos]);
                         mAdapter.removeAt(pos);
                     }
 

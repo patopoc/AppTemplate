@@ -16,7 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.modules.ModBlank;
 import app.com.apptemplate.modules.ModItemsMaster;
-import app.com.apptemplate.modules.ModLogin;
+import app.com.apptemplate.modules.ModLogino;
 import app.com.apptemplate.navigation.NavigationDrawerFragment;
 
 
@@ -65,7 +65,7 @@ public class AppMain extends ActionBarActivity
     }
 
     public void redirectToLogin(int modPosition){
-        Fragment modLogin= new ModLogin();
+        Fragment modLogin= new ModLogino();
         Bundle args= new Bundle();
         args.putInt("modPosition",modPosition);
         modLogin.setArguments(args);
