@@ -19,10 +19,10 @@ import app.com.apptemplate.interfaces.RedirectInterface;
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
  * Activities that contain this fragment must implement the
- * Use the {@link ModLogino#newInstance} factory method to
+ * Use the {@link ModLogin2#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ModLogino extends Fragment {
+public class ModLogin2 extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,8 +43,8 @@ public class ModLogino extends Fragment {
      * @return A new instance of fragment modLogin.
      */
     // TODO: Rename and change types and number of parameters
-    public static ModLogino newInstance(String param1, String param2) {
-        ModLogino fragment = new ModLogino();
+    public static ModLogin2 newInstance(String param1, String param2) {
+        ModLogin2 fragment = new ModLogin2();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -52,7 +52,7 @@ public class ModLogino extends Fragment {
         return fragment;
     }
 
-    public ModLogino() {
+    public ModLogin2() {
         // Required empty public constructor
     }
 
