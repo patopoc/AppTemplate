@@ -16,6 +16,7 @@ import app.com.apptemplate.R;
 import app.com.apptemplate.adapters.PlacesAdapter;
 import app.com.apptemplate.dummy.DummyData;
 import app.com.apptemplate.interfaces.RedirectInterface;
+import app.com.apptemplate.utils.DataProvider;
 import app.com.apptemplate.utils.RecyclerItemClickListener;
 import app.com.apptemplate.utils.SessionControl;
 
@@ -93,6 +94,8 @@ public class ModItemsMaster extends Fragment {
         mLayoutManager= new LinearLayoutManager(getActivity());
         mRecycleView.setLayoutManager(mLayoutManager);
         mAdapter= new PlacesAdapter(DummyData.data,mRecycleView);
+        DataProvider dataProvider= new DataProvider(mAdapter);
+        dataProvider.loadFromUrl("");
         mRecycleView.setAdapter(mAdapter);
 
         mRecycleView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
@@ -132,16 +135,5 @@ public class ModItemsMaster extends Fragment {
         super.onDetach();
         mRedirectListener = null;
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }
