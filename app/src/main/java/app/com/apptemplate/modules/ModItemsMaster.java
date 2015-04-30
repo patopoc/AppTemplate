@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import app.com.apptemplate.AppConf;
 import app.com.apptemplate.R;
 import app.com.apptemplate.adapters.PlacesAdapter;
 import app.com.apptemplate.adapters.RecyclerAdapter;
@@ -101,7 +102,7 @@ public class ModItemsMaster extends Fragment {
         mAdapter= new RecyclerAdapter(mRecycleView);
 
         DataProvider dataProvider= new DataProvider(getActivity(),mAdapter);
-        dataProvider.loadFromUrl("http://192.168.1.100/weservis.php","json");
+        dataProvider.loadFromUrl(AppConf.protocol+"://"+AppConf.host+"/weservis.php","json");
         mRecycleView.setAdapter(mAdapter);
 
         mRecycleView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
