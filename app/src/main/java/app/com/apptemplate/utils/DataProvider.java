@@ -31,14 +31,12 @@ public class DataProvider {
 
     RecyclerAdapter mAdapter=null;
     View mView=null;
-    ResponseClass reqResponse;
     Context mContext;
 
-    public DataProvider(Context context,RecyclerAdapter adapter, ArrayList<?> arrayData){
+    public DataProvider(Context context,RecyclerAdapter adapter){
         mAdapter=adapter;
 
-        reqResponse= new ResponseClass(arrayData);
-        Log.d(TAG,"reqResponse.reqData type: "+reqResponse.responseData.getClass().getName());
+        //Log.d(TAG,"reqResponse.reqData type: "+reqResponse.responseData.getClass().getName());
         mContext= context;
     }
 
@@ -58,11 +56,7 @@ public class DataProvider {
                     new Response.Listener<String>(){
                         @Override
                         public void onResponse(String response) {
-                            Gson gson= new Gson();
-                            reqResponse= gson.fromJson(response, ResponseClass.class);
-                            mAdapter.setDataArray(reqResponse.responseData);
-                            mAdapter.notifyDataSetChanged();
-
+                            mAdapter.setDataSet(response);
                         }
                     },
                     new Response.ErrorListener() {

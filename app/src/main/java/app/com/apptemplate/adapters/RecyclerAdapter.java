@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     final String TAG="RecyclerAdapter";
     private List<StringClass> mDataset;
     RecyclerView mRecycleView;
+    NetworkResponse networkResponse;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView mTextView;
@@ -31,10 +34,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public RecyclerAdapter(RecyclerView rv){
         mRecycleView=rv;
         mDataset= new ArrayList<>();
+        networkResponse= new NetworkResponse();
+        networkResponse.responseData= new ArrayList<StringClass>();
+
     }
 
-    public void setDataArray( List<?> data) {
-        mDataset=data;
+    public void setDataSet( String data) {
+        Gson gson= new Gson();
+        networkResponse= gson.fromJson(data,NetworkResponse.class);
+        mDataset=networkResponse.responseData;
+        notifyDataSetChanged();
 
     }
     // Create new views (invoked by the layout manager)
@@ -49,6 +58,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 Log.d(TAG,"touched: "+mDataset[pos]);
             }
         });*/
+
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
 
         ViewHolder vh = new ViewHolder(v);
@@ -59,8 +69,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position){
         //holder.mTextView.setText(mDataset[position]);
-        holder.mTextView.setText(mDataset.get(position).toString());
-        mDataset.get(0).
+        holder.mTextView.setText(mDataset.get(position).cadena);
     }
 
     @Override
@@ -72,5 +81,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         mDataset.remove(pos);
         notifyItemRemoved(pos);
         notifyItemRangeRemoved(pos, mDataset.size());
+    }
+
+    //Respuesta desde webservice donde responseData debe ser igual a dataset del adapter
+
+    public class NetworkResponse {
+        public String responseStatus;
+        public String responseText;
+        public ArrayList<StringClass> responseData;
     }
 }

@@ -73,7 +73,7 @@ public class ModItemsMaster extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionControl= new SessionControl(getActivity(),true);
+        sessionControl= new SessionControl(getActivity(),false);
         int modPosition=0;
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -100,8 +100,8 @@ public class ModItemsMaster extends Fragment {
         //mAdapter= new PlacesAdapter(DummyData.data,mRecycleView);
         mAdapter= new RecyclerAdapter(mRecycleView);
 
-        DataProvider dataProvider= new DataProvider(getActivity(),mAdapter,new ArrayList<String>());
-        dataProvider.loadFromUrl("http://192.168.1.106/weservis.php","json");
+        DataProvider dataProvider= new DataProvider(getActivity(),mAdapter);
+        dataProvider.loadFromUrl("http://192.168.1.100/weservis.php","json");
         mRecycleView.setAdapter(mAdapter);
 
         mRecycleView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
