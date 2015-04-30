@@ -1,6 +1,7 @@
 package app.com.apptemplate.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         Gson gson= new Gson();
         networkResponse= gson.fromJson(data,NetworkResponse.class);
         mDataset=networkResponse.responseData;
+        Log.d(TAG, mDataset.get(0).cadena);
         notifyDataSetChanged();
 
     }

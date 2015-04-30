@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ import app.com.apptemplate.adapters.RecyclerAdapter;
 import app.com.apptemplate.dummy.DummyData;
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.utils.DataProvider;
+import app.com.apptemplate.utils.LoadingDialog;
 import app.com.apptemplate.utils.RecyclerItemClickListener;
 import app.com.apptemplate.utils.SessionControl;
 import app.com.apptemplate.utils.StringClass;
@@ -101,8 +103,11 @@ public class ModItemsMaster extends Fragment {
         //mAdapter= new PlacesAdapter(DummyData.data,mRecycleView);
         mAdapter= new RecyclerAdapter(mRecycleView);
 
+        LoadingDialog listLoading= LoadingDialog.newInstance(getActivity().getSupportFragmentManager());
+        listLoading.setMessage(getResources().getString(R.string.loading_message));
+
         DataProvider dataProvider= new DataProvider(getActivity(),mAdapter);
-        dataProvider.loadFromUrl(AppConf.protocol+"://"+AppConf.host+"/weservis.php","json");
+        dataProvider.loadFromUrl(AppConf.protocol+"://"+AppConf.host+"/weservis.php","json",listLoading);
         mRecycleView.setAdapter(mAdapter);
 
         mRecycleView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),

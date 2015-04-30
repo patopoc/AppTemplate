@@ -1,13 +1,16 @@
 package app.com.apptemplate.utils;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.ProgressBar;
 
 import com.android.volley.Cache;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -48,15 +51,21 @@ public class DataProvider {
         mView=view;
     }
 
-    public void loadFromUrl(String dataUrl,String type){
+    public void loadFromUrl(String dataUrl,String type,final LoadingDialog loadingFragment){
         Request request= null;
+        if(loadingFragment != null) {
+            loadingFragment.showDialog();
+        }
         if(type.equals("json")){
-            Log.d(TAG,"loading json");
+            Log.d(TAG,"loading json: "+dataUrl);
             StringRequest jsonReq= new StringRequest(Request.Method.GET,dataUrl,
                     new Response.Listener<String>(){
                         @Override
                         public void onResponse(String response) {
                             mAdapter.setDataSet(response);
+                            if(loadingFragment != null) {
+                                loadingFragment.closeDialog();
+                            }
                         }
                     },
                     new Response.ErrorListener() {
@@ -65,6 +74,9 @@ public class DataProvider {
                             Log.d(TAG, "err: " + error.getMessage());
                         }
                     });
+            jsonReq.setRetryPolicy(new DefaultRetryPolicy(6000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             request= jsonReq;
         }
         if(request != null) {
