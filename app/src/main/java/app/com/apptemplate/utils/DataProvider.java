@@ -31,6 +31,7 @@ import java.util.List;
 
 import app.com.apptemplate.adapters.RecyclerAdapter;
 import app.com.apptemplate.interfaces.DataSetInterface;
+import app.com.apptemplate.modules.ModItemsMaster;
 
 /**
  * Created by steve on 28/04/2015.
