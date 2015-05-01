@@ -8,8 +8,8 @@ public class AppConf {
     public static boolean acceptTwoPane=false;
 
     /*Network Comunication Details*/
-    //public static String host="192.168.1.100";
-    public static String host="192.168.1.106";
+    public static String host="192.168.1.100";
+    //public static String host="192.168.1.106";
     public static String protocol="http";
 
 

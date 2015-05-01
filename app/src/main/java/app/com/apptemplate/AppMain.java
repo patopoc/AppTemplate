@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.modules.ModBlank;
+import app.com.apptemplate.modules.ModImages;
 import app.com.apptemplate.modules.ModItemsMaster;
 import app.com.apptemplate.modules.ModLogin2;
 import app.com.apptemplate.navigation.NavigationDrawerFragment;
@@ -87,11 +88,12 @@ public class AppMain extends ActionBarActivity
         Fragment modFragment= null;
         switch (position){
             case 1:
-                modFragment= new ModBlank();
+                modFragment= new ModImages();
                 break;
             case 2:
                 modFragment= new ModItemsMaster();
                 break;
+
             default:
                 modFragment= new PlaceholderFragment().newInstance(position+1);
                 break;

@@ -8,21 +8,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.android.volley.Response;
 import com.google.gson.Gson;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
 import app.com.apptemplate.AppConf;
 import app.com.apptemplate.R;
-import app.com.apptemplate.adapters.PlacesAdapter;
 import app.com.apptemplate.adapters.RecyclerAdapter;
-import app.com.apptemplate.dummy.DummyData;
-import app.com.apptemplate.interfaces.DataSetInterface;
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.utils.DataProvider;
 import app.com.apptemplate.utils.LoadingDialog;
@@ -33,15 +33,15 @@ import app.com.apptemplate.utils.StringClass;
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
  * Activities that contain this fragment must implement the *
- * Use the {@link app.com.apptemplate.modules.ModItemsMaster#newInstance} factory method to
+ * Use the {@link app.com.apptemplate.modules.ModImages#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ModItemsMaster extends Fragment implements DataSetInterface{
+public class ModImages extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private final String TAG="ModItemsMaster";
+    private final String TAG="ModImages";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -58,8 +58,8 @@ public class ModItemsMaster extends Fragment implements DataSetInterface{
      * @return A new instance of fragment BlankFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ModItemsMaster newInstance(String param1, String param2) {
-        ModItemsMaster fragment = new ModItemsMaster();
+    public static ModImages newInstance(String param1, String param2) {
+        ModImages fragment = new ModImages();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -67,14 +67,11 @@ public class ModItemsMaster extends Fragment implements DataSetInterface{
         return fragment;
     }
 
-    public ModItemsMaster() {
+    public ModImages() {
         // Required empty public constructor
     }
 
     private SessionControl sessionControl;
-    private RecyclerView mRecycleView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private PlacesAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,33 +95,26 @@ public class ModItemsMaster extends Fragment implements DataSetInterface{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragmentView= inflater.inflate(R.layout.fragment_mod_items_master, container, false);
-        mRecycleView= (RecyclerView) fragmentView.findViewById(R.id.items_master);
+        View fragmentView= inflater.inflate(R.layout.fragment_mod_images, container, false);
+        final ProgressBar pb= (ProgressBar) fragmentView.findViewById(R.id.pb_img_1);
+        final ImageView imageView= (ImageView) fragmentView.findViewById(R.id.img_1);
+        final ArrayList<StringClass> imgUrls;
+        Log.d(TAG, "empezo ModImaged");
+        //LoadingDialog listLoading= LoadingDialog.newInstance(getActivity().getSupportFragmentManager());
+        //listLoading.setMessage(getResources().getString(R.string.loading_message));
 
-        mLayoutManager= new LinearLayoutManager(getActivity());
-        mRecycleView.setLayoutManager(mLayoutManager);
-        mAdapter= new PlacesAdapter(new ArrayList<StringClass>() ,mRecycleView);
-        //mAdapter= new LugaresAdapter(mRecycleView);
-
-        LoadingDialog listLoading= LoadingDialog.newInstance(getActivity().getSupportFragmentManager());
-        listLoading.setMessage(getResources().getString(R.string.loading_message));
-
-        //!!!!!!!!!ESTO ESTA MAL EL ADAPTER DEBE SER GENERICO
-
-        //DataProvider dataProvider= new DataProvider(getActivity(),mAdapter);
-        //dataProvider.loadFromUrl(AppConf.protocol+"://"+AppConf.host+"/weservis.php","json",listLoading);
-        DataProvider.loadFromUrl(this,AppConf.protocol+"://"+AppConf.host+"/weservis.php","json",listLoading);
-        //mRecycleView.setAdapter(mAdapter);
-
-        mRecycleView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
-                new RecyclerItemClickListener.OnItemClickListener(){
-                    @Override
-                    public void onItemClick(View view, int pos){
-                        mAdapter.removeAt(pos);
-                    }
-
-                })
-        );
+        Response.Listener<String> respListener= new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Gson gson= new Gson();
+                NetworkResponse resp= gson.fromJson(response,NetworkResponse.class);
+                if(resp.responseStatus.equals("ok")){
+                    String url= resp.responseData.get(0).cadena;
+                    DataProvider.loadImage(getActivity(),url,imageView,pb);
+                }
+            }
+        };
+        DataProvider.loadJson(getActivity(),AppConf.protocol+"://"+AppConf.host+"/weservis.php",respListener);
 
         return fragmentView;
     }
@@ -151,16 +141,6 @@ public class ModItemsMaster extends Fragment implements DataSetInterface{
     public void onDetach() {
         super.onDetach();
         mRedirectListener = null;
-    }
-
-    @Override
-    public void setAdapterDataSet(String data) {
-        Gson gson= new Gson();
-        NetworkResponse networkResponse= gson.fromJson(data,NetworkResponse.class);
-        ArrayList<StringClass> dataSet= networkResponse.responseData;
-        mAdapter= new PlacesAdapter(dataSet,mRecycleView);
-        Log.d(TAG,"dataSet changed: "+data);
-        mRecycleView.setAdapter(mAdapter);
     }
 
     public class NetworkResponse {

@@ -10,13 +10,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import app.com.apptemplate.R;
+import app.com.apptemplate.utils.StringClass;
 
 /**
  * Created by steve on 27/04/2015.
  */
 public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder>{
     final String TAG="PlacesAdapter";
-    private ArrayList<String> mDataset;
+    private ArrayList<StringClass> mDataset;
     RecyclerView mRecycleView;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -27,11 +28,8 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         }
     }
 
-    public PlacesAdapter(String[] mydataset, RecyclerView rv){
-        mDataset= new ArrayList<String>();
-        for(int i=0;i<mydataset.length;i++)
-            mDataset.add(i,mydataset[i]);
-
+    public PlacesAdapter(ArrayList<StringClass> mydataset, RecyclerView rv){
+        mDataset= mydataset;
         mRecycleView=rv;
     }
 
@@ -57,7 +55,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position){
         //holder.mTextView.setText(mDataset[position]);
-        holder.mTextView.setText(mDataset.get(position));
+        holder.mTextView.setText(mDataset.get(position).cadena);
     }
 
     @Override
