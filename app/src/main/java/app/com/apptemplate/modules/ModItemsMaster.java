@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import app.com.apptemplate.AppConf;
 import app.com.apptemplate.R;
+import app.com.apptemplate.adapters.LugaresAdapter;
 import app.com.apptemplate.adapters.PlacesAdapter;
 import app.com.apptemplate.adapters.RecyclerAdapter;
 import app.com.apptemplate.dummy.DummyData;
@@ -75,6 +76,7 @@ public class ModItemsMaster extends Fragment implements DataSetInterface{
     private RecyclerView mRecycleView;
     private RecyclerView.LayoutManager mLayoutManager;
     private PlacesAdapter mAdapter;
+    private LugaresAdapter mAdapter2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,23 +106,24 @@ public class ModItemsMaster extends Fragment implements DataSetInterface{
         mLayoutManager= new LinearLayoutManager(getActivity());
         mRecycleView.setLayoutManager(mLayoutManager);
         mAdapter= new PlacesAdapter(new ArrayList<StringClass>() ,mRecycleView);
-        //mAdapter= new LugaresAdapter(mRecycleView);
+        mAdapter2= new LugaresAdapter(mRecycleView);
 
         LoadingDialog listLoading= LoadingDialog.newInstance(getActivity().getSupportFragmentManager());
         listLoading.setMessage(getResources().getString(R.string.loading_message));
 
-        //!!!!!!!!!ESTO ESTA MAL EL ADAPTER DEBE SER GENERICO
 
-        //DataProvider dataProvider= new DataProvider(getActivity(),mAdapter);
+        //DataProvider dataProvider= new DataProvider(getActivity(),mAdapter2);
         //dataProvider.loadFromUrl(AppConf.protocol+"://"+AppConf.host+"/weservis.php","json",listLoading);
-        DataProvider.loadFromUrl(this,AppConf.protocol+"://"+AppConf.host+"/weservis.php","json",listLoading);
-        //mRecycleView.setAdapter(mAdapter);
+        DataProvider.loadAdapterFromUrl(this,mAdapter2,
+                AppConf.protocol+"://"+AppConf.host+"/weservis.php","json",listLoading);
+
+        mRecycleView.setAdapter(mAdapter2);
 
         mRecycleView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
                 new RecyclerItemClickListener.OnItemClickListener(){
                     @Override
                     public void onItemClick(View view, int pos){
-                        mAdapter.removeAt(pos);
+                        mAdapter2.removeAt(pos);
                     }
 
                 })

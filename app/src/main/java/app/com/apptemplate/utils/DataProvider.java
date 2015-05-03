@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.com.apptemplate.adapters.BaseRecyclerAdapter;
 import app.com.apptemplate.adapters.RecyclerAdapter;
 import app.com.apptemplate.interfaces.DataSetInterface;
 import app.com.apptemplate.modules.ModItemsMaster;
@@ -39,11 +40,11 @@ import app.com.apptemplate.modules.ModItemsMaster;
 public class DataProvider {
     final static String TAG="DataProvider";
 
-    //LugaresAdapter mAdapter=null;
+    //BaseRecyclerAdapter mAdapter=null;
     View mView=null;
     Context mContext;
 
-    /*public DataProvider(Context context,LugaresAdapter adapter){
+    /*public DataProvider(Context context,BaseRecyclerAdapter adapter){
         mAdapter=adapter;
         mContext= context;
     }*/
@@ -104,6 +105,44 @@ public class DataProvider {
                             //if(mAdapter!=null)
                             //    mAdapter.setDataSet(response);
                             dataSetInterface.setAdapterDataSet(response);
+                            if(loadingFragment != null) {
+                                loadingFragment.closeDialog();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d(TAG, "err: " + error.getMessage());
+                        }
+                    });
+            request= jsonReq;
+        }
+        if(request != null) {
+            request.setRetryPolicy(new DefaultRetryPolicy(6000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            NetworkProvider.getInstance(fragment.getActivity()).addToRequestQueue(request);
+        }
+    }
+
+    public static void loadAdapterFromUrl(Fragment fragment, final BaseRecyclerAdapter adapter,
+                                          String dataUrl,String type,final LoadingDialog loadingFragment){
+        Request request= null;
+
+        if(loadingFragment != null) {
+            loadingFragment.showDialog();
+        }
+        if(type.equals("json")){
+            Log.d(TAG,"loading json: "+dataUrl);
+            StringRequest jsonReq= new StringRequest(Request.Method.GET,dataUrl,
+                    new Response.Listener<String>(){
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d(TAG,"json loaded");
+                            if(adapter!=null)
+                                adapter.setDataSet(response);
+
                             if(loadingFragment != null) {
                                 loadingFragment.closeDialog();
                             }

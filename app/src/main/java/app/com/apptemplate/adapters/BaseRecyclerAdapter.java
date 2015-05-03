@@ -18,13 +18,13 @@ import app.com.apptemplate.utils.StringClass;
 /**
  * Created by steve on 27/04/2015.
  */
-public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<BaseRecyclerAdapter.ViewHolder>{
+public abstract class BaseRecyclerAdapter<VH extends RecyclerView.ViewHolder>
+        extends RecyclerView.Adapter<VH>{
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class VH extends RecyclerView.ViewHolder{
 
-        public ViewHolder (View v){
+        public VH (View v){
             super(v);
-
         }
     }
 
