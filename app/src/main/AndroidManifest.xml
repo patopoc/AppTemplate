@@ -8,9 +8,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <service android:name=".widgets.WidgetUpdateService"/>
+
         <receiver android:name=".widgets.WidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name=".widgets.WidgetProvider.ACTION_UPDATE" />
+                <action android:name=".widgets.WidgetProvider.ACTION_DELETE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_info"></meta-data>

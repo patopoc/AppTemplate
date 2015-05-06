@@ -9,9 +9,14 @@
         android:layout_height="wrap_content"
         android:text="widgetito"/>
     <Button
-        android:id="@+id/button_widget"
+        android:id="@+id/btn_widget_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="click me"/>
+    <Button
+        android:id="@+id/btn_widget_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"/>
 
 </LinearLayout>
