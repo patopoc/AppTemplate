@@ -19,6 +19,7 @@ import android.widget.RemoteViews;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import app.com.apptemplate.R;
@@ -33,6 +34,32 @@ public class WidgetProvider extends AppWidgetProvider {
 
     public static String ACTION_UPDATE="ActionUpdate";
     public static String ACTION_DELETE="ActionDelete";
+
+    @Override
+    public void onEnabled(Context context){
+        Log.d(TAG,"setting alarm");
+        setAlarm(context);
+        super.onEnabled(context);
+    }
+
+    public void setAlarm(Context context) {
+
+        Calendar calendar = Calendar.getInstance();
+        //calendar.set(Calendar.DAY_OF_YEAR,1);
+        calendar.set(Calendar.HOUR_OF_DAY, 19); // if u need run 2PM use 14
+        calendar.set(Calendar.MINUTE, 24);
+        calendar.set(Calendar.SECOND, 0);
+
+        AlarmManager am = (AlarmManager) context
+                .getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, NotificationService.class);
+        //intent.putExtra(ONE_TIME, Boolean.FALSE);
+        PendingIntent pi = PendingIntent.getService(context, 0, intent, 0);
+
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pi);
+    }
+
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
 
@@ -92,8 +119,8 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent){
 
-        Intent notificationIntent= new Intent(context, NotificationService.class);
-        context.startService(notificationIntent);
+        //Intent notificationIntent= new Intent(context, NotificationService.class);
+        //context.startService(notificationIntent);
 
         DataBaseHelper dbh= new DataBaseHelper(context);
         int count=0;

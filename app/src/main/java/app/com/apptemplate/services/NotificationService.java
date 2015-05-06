@@ -1,12 +1,18 @@
 package app.com.apptemplate.services;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.RingtoneManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import app.com.apptemplate.AppMain;
+import app.com.apptemplate.R;
 import app.com.apptemplate.utils.DataBaseHelper;
 import app.com.apptemplate.utils.TimeHelper;
 
@@ -21,6 +27,8 @@ public class NotificationService extends IntentService {
     }
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d(TAG,"launching notification");
+        sendNotification("hace pue click loco!");
         DataBaseHelper dbh= new DataBaseHelper(this);
         try {
             dbh.createDataBase();
@@ -36,5 +44,22 @@ public class NotificationService extends IntentService {
         }catch(Exception e){
             Log.e(TAG,e.getMessage());
         }
+    }
+
+    private void sendNotification(String msg){
+        NotificationCompat.Builder mBuilder= new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_action_call)
+                .setContentTitle("Notifiqueichon")
+                .setAutoCancel(true)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentText(msg);
+        Intent resultIntent = new Intent(this,AppMain.class);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,0,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        int mNotificationID= 001;
+
+        NotificationManager mNM= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        mNM.notify(mNotificationID,mBuilder.build());
     }
 }
