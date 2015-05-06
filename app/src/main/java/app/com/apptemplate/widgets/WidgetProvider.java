@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import app.com.apptemplate.R;
+import app.com.apptemplate.services.NotificationService;
 import app.com.apptemplate.utils.DataBaseHelper;
 
 /**
@@ -78,7 +79,10 @@ public class WidgetProvider extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.btn_widget_update, pendingUpdate);
             views.setOnClickPendingIntent(R.id.btn_widget_delete, pendingDelete);
+
             appWidgetManager.updateAppWidget(appWidgetIds[0], views);
+
+
 
         }catch(Exception e){
             Log.e("WidgetProvider",e.getMessage());
@@ -87,6 +91,10 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent){
+
+        Intent notificationIntent= new Intent(context, NotificationService.class);
+        context.startService(notificationIntent);
+
         DataBaseHelper dbh= new DataBaseHelper(context);
         int count=0;
         if(intent.getAction().equals(ACTION_UPDATE)){
@@ -123,7 +131,7 @@ public class WidgetProvider extends AppWidgetProvider {
             }
         }
 
-        super.onReceive(context,intent);
+        super.onReceive(context, intent);
 
     }
 
@@ -136,17 +144,6 @@ public class WidgetProvider extends AppWidgetProvider {
         AppWidgetManager appWidgetManager= AppWidgetManager.getInstance(context);
         appWidgetManager.updateAppWidget(thisWidget,views);
         Log.d(TAG, "Widget updated");
-    }
-
-    //timestamp in milliseconds
-    public String getDate(long timestamp){
-        try{
-            DateFormat dateFormat= new SimpleDateFormat("dd/MM/yyyy");
-            Date date = new Date(timestamp);
-            return dateFormat.format(date);
-        }catch (Exception e){
-            return "";
-        }
     }
 
 }

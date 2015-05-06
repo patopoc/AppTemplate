@@ -9,6 +9,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <service android:name=".widgets.WidgetUpdateService"/>
+        <service android:name=".services.NotificationService"/>
 
         <receiver android:name=".widgets.WidgetProvider">
             <intent-filter>
