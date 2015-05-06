@@ -94,7 +94,7 @@ public class WidgetProvider extends AppWidgetProvider {
             dbh.createDataBase();
             SQLiteDatabase database= dbh.getReadableDatabase();
             ContentValues val= new ContentValues();
-            val.put("date",System.currentTimeMillis()/1000);
+            val.put("date",System.currentTimeMillis());
             database.insert("smiles",null,val);
             Log.d("WidgetProvider","row inserted");
             Cursor cursor=database.rawQuery("select count(date) from smiles",null);
@@ -138,6 +138,7 @@ public class WidgetProvider extends AppWidgetProvider {
         Log.d(TAG, "Widget updated");
     }
 
+    //timestamp in milliseconds
     public String getDate(long timestamp){
         try{
             DateFormat dateFormat= new SimpleDateFormat("dd/MM/yyyy");
