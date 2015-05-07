@@ -12,5 +12,9 @@ public class AppConf {
     public static String host="192.168.1.106";
     public static String protocol="http";
 
+    /*Notification Alarm */
+    public static long notificationHours=12;
+    public static long notificationDays=7;
+
 
 }

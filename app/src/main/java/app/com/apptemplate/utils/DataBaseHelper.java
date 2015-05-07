@@ -1,5 +1,6 @@
 package app.com.apptemplate.utils;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,7 +42,7 @@ boolean dbExist = checkDataBase();
 		this.getReadableDatabase();
 	 
 		try {
-	 
+	 		Log.d("DBH","database doesn't exist, creating now...");
 			copyDataBase();
 	 
 		} catch (IOException e) {
@@ -53,23 +54,8 @@ boolean dbExist = checkDataBase();
 }
  
 private boolean checkDataBase(){
- 
-SQLiteDatabase checkDB = null;
- 
-	try{
-		String myPath = DB_PATH + DB_NAME;
-		checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-	}catch(SQLiteCantOpenDatabaseException e){
-	    Log.d("DataBaseHelper",e.getMessage());
-	}
- 
-	if(checkDB != null){
- 
-		checkDB.close();
- 
-	}
- 
-return checkDB != null ? true : false;
+	File dbFile= myContext.getDatabasePath(DB_NAME);
+	return dbFile.exists();
 }
  
 private void copyDataBase() throws IOException{
@@ -90,7 +76,7 @@ myInput.close();
  
 }
  
-public void openDataBase() throws SQLException{
+public void openDataBase() throws SQLiteException{
  
 
 String myPath = DB_PATH + DB_NAME;

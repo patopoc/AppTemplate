@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.services.NotificationService;
 import app.com.apptemplate.utils.DataBaseHelper;
@@ -46,8 +47,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
         Calendar calendar = Calendar.getInstance();
         //calendar.set(Calendar.DAY_OF_YEAR,1);
-        calendar.set(Calendar.HOUR_OF_DAY, 19); // if u need run 2PM use 14
-        calendar.set(Calendar.MINUTE, 24);
+        calendar.set(Calendar.HOUR_OF_DAY, 13); // if u need run 2PM use 14
+        calendar.set(Calendar.MINUTE, 35);
         calendar.set(Calendar.SECOND, 0);
 
         AlarmManager am = (AlarmManager) context
@@ -100,9 +101,10 @@ public class WidgetProvider extends AppWidgetProvider {
             intentUpdate.setAction(ACTION_UPDATE);
             PendingIntent pendingUpdate= PendingIntent.getBroadcast(context,100,intentUpdate,PendingIntent.FLAG_CANCEL_CURRENT);
 
-            Intent intentDelete = new Intent(context, WidgetProvider.class);
-            intentDelete.setAction(ACTION_DELETE);
-            PendingIntent pendingDelete= PendingIntent.getBroadcast(context,200,intentDelete,PendingIntent.FLAG_CANCEL_CURRENT);
+            Intent intentDelete = new Intent(context, AppMain.class);
+            //intentDelete.setAction(ACTION_DELETE);
+            intentDelete.putExtra(AppMain.SELECT_FRAGMENT,2);
+            PendingIntent pendingDelete= PendingIntent.getActivity(context,200,intentDelete,PendingIntent.FLAG_CANCEL_CURRENT);
 
             views.setOnClickPendingIntent(R.id.btn_widget_update, pendingUpdate);
             views.setOnClickPendingIntent(R.id.btn_widget_delete, pendingDelete);
@@ -119,9 +121,6 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent){
 
-        //Intent notificationIntent= new Intent(context, NotificationService.class);
-        //context.startService(notificationIntent);
-
         DataBaseHelper dbh= new DataBaseHelper(context);
         int count=0;
         if(intent.getAction().equals(ACTION_UPDATE)){
@@ -130,7 +129,8 @@ public class WidgetProvider extends AppWidgetProvider {
             SQLiteDatabase database= dbh.getReadableDatabase();
             ContentValues val= new ContentValues();
             val.put("date",System.currentTimeMillis());
-            database.insert("smiles",null,val);
+
+            database.insert("smiles", null, val);
             Log.d("WidgetProvider","row inserted");
             Cursor cursor=database.rawQuery("select count(date) from smiles",null);
             cursor.moveToFirst();
@@ -157,6 +157,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 Log.e(TAG,e.getMessage());
             }
         }
+        dbh.close();
 
         super.onReceive(context, intent);
 

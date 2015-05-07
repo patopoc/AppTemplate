@@ -56,7 +56,7 @@ public class ModBlank extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionControl= new SessionControl(getActivity(),true);
+        sessionControl= new SessionControl(getActivity(),false);
         int modPosition=0;
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);

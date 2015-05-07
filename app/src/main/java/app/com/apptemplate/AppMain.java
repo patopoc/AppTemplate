@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,9 @@ public class AppMain extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         RedirectInterface {
 
+    final String TAG="AppMain";
+
+    public static String SELECT_FRAGMENT="selectFragment";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -40,6 +44,14 @@ public class AppMain extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_main);
 
+        Bundle extras = getIntent().getExtras();
+        int defaultFragment=-1;
+
+        if(extras != null){
+            defaultFragment= extras.getInt(SELECT_FRAGMENT,defaultFragment);
+        }
+
+
         if(AppConf.navigationType.equals("drawer")) {
             useNavigationDrawer();
         }
@@ -51,6 +63,11 @@ public class AppMain extends ActionBarActivity
         }
         else if(AppConf.navigationType.equals("grid")){
 
+        }
+
+        if(defaultFragment != -1){
+            Log.d(TAG, "Setting default fragment");
+            setFragment(defaultFragment);
         }
     }
 
@@ -84,9 +101,15 @@ public class AppMain extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        setFragment(position);
+    }
 
+    public void setFragment(int position){
         Fragment modFragment= null;
         switch (position){
+            case 0:
+                modFragment= new ModBlank();
+                break;
             case 1:
                 modFragment= new ModImages();
                 break;
@@ -106,9 +129,9 @@ public class AppMain extends ActionBarActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, modFragment)
+                    .addToBackStack("NavStack")
                     .commit();
         }
-
     }
 
     public void onSectionAttached(int number) {
