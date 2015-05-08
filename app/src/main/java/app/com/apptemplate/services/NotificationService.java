@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -42,10 +43,10 @@ public class NotificationService extends IntentService {
             if(enableDailyNotification){
                 //if(lastSmileDate + (AppConf.notificationDays * 3600000) < System.currentTimeMillis()){
                 if(lastSmileDate + 120000 < System.currentTimeMillis()){
-                    sendNotification("Hoy no hiciste click hoy loco!");
+                    sendNotification("Hoy no hiciste click hoy loco!",this, AppMain.class,2);
                 }
                 else{
-                    sendNotification("hiciste ra'e click hoy loco!");
+                    sendNotification("hiciste ra'e click hoy loco!",this, AppMain.class,2);
                 }
             }
             if(enableWeeklyNotification){
@@ -62,20 +63,23 @@ public class NotificationService extends IntentService {
         }
     }
 
-    private void sendNotification(String msg){
-        NotificationCompat.Builder mBuilder= new NotificationCompat.Builder(this)
+    public static void sendNotification(String msg, Context context, Class<?> launchClass,Integer fragmentPos){
+        NotificationCompat.Builder mBuilder= new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_action_call)
                 .setContentTitle("Notifiqueichon")
                 .setAutoCancel(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentText(msg);
-        Intent resultIntent = new Intent(this,AppMain.class);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this,0,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent resultIntent = new Intent(context,launchClass);
+        if(fragmentPos != null)
+            resultIntent.putExtra(AppMain.SELECT_FRAGMENT,fragmentPos);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(context,0,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
 
         int mNotificationID= 001;
 
-        NotificationManager mNM= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager mNM= (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         mNM.notify(mNotificationID,mBuilder.build());
     }
 }

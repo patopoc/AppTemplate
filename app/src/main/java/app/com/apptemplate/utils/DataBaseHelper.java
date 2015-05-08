@@ -44,6 +44,7 @@ boolean dbExist = checkDataBase();
 		try {
 	 		Log.d("DBH","database doesn't exist, creating now...");
 			copyDataBase();
+            Log.d("DBH","database created");
 	 
 		} catch (IOException e) {
 	 

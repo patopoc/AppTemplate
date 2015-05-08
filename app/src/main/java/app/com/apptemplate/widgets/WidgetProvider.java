@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -39,6 +40,13 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context){
         Log.d(TAG,"setting alarm");
+        DataBaseHelper dbh= new DataBaseHelper(context);
+        try {
+            dbh.createDataBase();
+            dbh.close();
+        }catch(Exception e){
+
+        }
         setAlarm(context);
         super.onEnabled(context);
     }
@@ -47,8 +55,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
         Calendar calendar = Calendar.getInstance();
         //calendar.set(Calendar.DAY_OF_YEAR,1);
-        calendar.set(Calendar.HOUR_OF_DAY, 13); // if u need run 2PM use 14
-        calendar.set(Calendar.MINUTE, 35);
+        calendar.set(Calendar.HOUR_OF_DAY, 15); // if u need run 2PM use 14
+        calendar.set(Calendar.MINUTE, 6);
         calendar.set(Calendar.SECOND, 0);
 
         AlarmManager am = (AlarmManager) context
