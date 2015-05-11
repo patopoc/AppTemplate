@@ -137,7 +137,6 @@ public class WidgetProvider extends AppWidgetProvider {
             SQLiteDatabase database= dbh.getReadableDatabase();
             ContentValues val= new ContentValues();
             val.put("date",System.currentTimeMillis());
-
             database.insert("smiles", null, val);
             Log.d("WidgetProvider","row inserted");
             Cursor cursor=database.rawQuery("select count(date) from smiles",null);

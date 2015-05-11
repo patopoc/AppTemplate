@@ -20,6 +20,7 @@ import app.com.apptemplate.modules.ModFacebook;
 import app.com.apptemplate.modules.ModImages;
 import app.com.apptemplate.modules.ModItemsMaster;
 import app.com.apptemplate.modules.ModLogin2;
+import app.com.apptemplate.modules.ModReport;
 import app.com.apptemplate.navigation.NavigationDrawerFragment;
 
 
@@ -118,7 +119,7 @@ public class AppMain extends ActionBarActivity
                 modFragment= new ModItemsMaster();
                 break;
             case 3:
-                modFragment= new ModFacebook();
+                modFragment= new ModReport();
 
         }
 

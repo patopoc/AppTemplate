@@ -29,4 +29,11 @@
 
     <!--Social Networks -->
     <string name="facebook_app_id">1645675518987334</string>
+
+    <!--Report  -->
+    <string name="lbl_status_bar">Happiness Level</string>
+    <string name="lbl_avg_spd">Avg Smiles per Day</string>
+    <string name="lbl_avg_spw">Avg Smiles per Week</string>
+    <string name="lbl_avg_spm">Avg Smiles per Month</string>
+
 </resources>
