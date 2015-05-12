@@ -35,5 +35,7 @@
     <string name="lbl_avg_spd">Avg Smiles per Day</string>
     <string name="lbl_avg_spw">Avg Smiles per Week</string>
     <string name="lbl_avg_spm">Avg Smiles per Month</string>
+    <string name="btn_daily">Diario</string>
+    <string name="btn_monthly">Mensual</string>
 
 </resources>

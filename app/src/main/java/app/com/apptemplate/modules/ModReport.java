@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.android.volley.Cache;
 import com.github.mikephil.charting.animation.Easing;
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import app.com.apptemplate.R;
@@ -40,6 +42,7 @@ public class ModReport extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    final String TAG="ModReport";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -71,6 +74,12 @@ public class ModReport extends Fragment {
 
     private SessionControl sessionControl;
     private Cursor cursorData;
+    private ArrayList<String> unsortedDatesString;
+    private ArrayList<Long> unsortedDatesLong;
+    private BarChart barChart;
+    private ArrayList<String> xLabels;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,8 +100,14 @@ public class ModReport extends Fragment {
         DataBaseHelper dbh= new DataBaseHelper(getActivity());
         try {
             dbh.createDataBase();
+            unsortedDatesLong= new ArrayList<>();
             SQLiteDatabase database= dbh.getReadableDatabase();
             cursorData=database.rawQuery("select date from smiles",null);
+            while(cursorData.moveToNext()){
+                unsortedDatesLong.add(cursorData.getLong(0));
+                //unsortedDatesString.add(TimeHelper.getDate(cursorData.getLong(0),"dd/MM/yyyy"));
+            }
+            cursorData.close();
 
         }catch(Exception e){
             Log.e("WidgetProvider",e.getMessage());
@@ -105,15 +120,45 @@ public class ModReport extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_mod_report, container, false);
 
-        BarChart barChart= (BarChart) view.findViewById(R.id.chart);
-        ArrayList<Integer> data= getCountBy(cursorData,"dd/MM/yyyy");
+        barChart= (BarChart) view.findViewById(R.id.chart);
+        Button btnDaily= (Button) view.findViewById(R.id.btn_daily);
+        Button btnMonthly= (Button) view.findViewById(R.id.btn_monthly);
+
+        btnDaily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setChartData("dd/MM/yyyy");
+            }
+        });
+
+        btnMonthly.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setChartData("MM/yyyy");
+            }
+        });
+
+        setChartData("dd/MM/yyyy");
+        return view;
+    }
+
+    private void setChartData(String orderFormat){
+        unsortedDatesString=null;
+        unsortedDatesString= new ArrayList<>();
+        for(long dateStamp : unsortedDatesLong){
+            unsortedDatesString.add(TimeHelper.getDate(dateStamp,orderFormat));
+        }
+
+        xLabels= new ArrayList<>();
+        ArrayList<Integer> data= getGroupCount();
+
         ArrayList<BarEntry> dataEntries= new ArrayList<BarEntry>();
-        ArrayList<String> xLabels= new ArrayList<>();
+
 
         for (int i=0; i < data.size(); i++){
             BarEntry entry= new BarEntry(data.get(i),i);
             dataEntries.add(entry);
-            xLabels.add(i+"");
+            //xLabels.add(i+"");
         }
 
         BarDataSet barDataSet= new BarDataSet(dataEntries,"Los Datos");
@@ -124,10 +169,13 @@ public class ModReport extends Fragment {
         barChart.setData(barData);
         barChart.animateY(500, Easing.EasingOption.EaseInQuad);
         barChart.invalidate();
-
-        return view;
     }
 
+    private ArrayList<String> getLabels(String orderFormat, int numLabels){
+        ArrayList<String> labels= new ArrayList<>();
+
+        return labels;
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mRedirectListener != null) {
@@ -152,36 +200,48 @@ public class ModReport extends Fragment {
         mRedirectListener = null;
     }
 
-    private ArrayList<Integer> getCountBy(Cursor cursor,String orderByFormat){
+    private ArrayList<Integer> getGroupCount(){
         ArrayList<String> searchedDates= new ArrayList<String>();
-        ArrayList<String> unsortedDates= new ArrayList<>();
         ArrayList<Integer> groupedCount= new ArrayList<>();
+        long lastDate=0;
 
-        while(cursor.moveToNext()){
-            unsortedDates.add(TimeHelper.getDate(cursor.getLong(0),orderByFormat));
-        }
-        cursor.close();
-
-        for(String currDate : unsortedDates){
+        for(int i=0; i< unsortedDatesString.size(); i++){
+            //Log.d(TAG,unsortedDatesString.get(i));
             boolean skipDate=false;
             //check if date was already searched
             for(String sd : searchedDates){
-                if(currDate.equals(sd)){
+                if(unsortedDatesString.get(i).equals(sd)){
                     skipDate=true;
                 }
             }
             if(skipDate)
                 continue;
+
+            int dateDiffInt=0;
+            /*if(unsortedDatesString.get(i).matches("\\d\\d/\\d\\d/\\d\\d\\d\\d") && lastDate != 0){
+                //Log.d(TAG,"lastDate: "+lastDate+" || "+unsortedDatesString.get(i));
+                long dateDiff=unsortedDatesLong.get(i) - lastDate;
+                if(dateDiff < 0)
+                    dateDiff *= -1;
+
+                dateDiffInt= (int) (dateDiff / 86400000);
+                //Log.d(TAG,"dateDiff "+dateDiffDays);
+            }
+
+            for(int j=0; j < dateDiffInt; j++){
+                groupedCount.add(0);
+            }*/
+
             int currCount=0;
-            for(String date : unsortedDates){
-                if(date.equals(currDate))
+            for(String date : unsortedDatesString){
+                if(date.equals(unsortedDatesString.get(i)))
                     currCount ++;
             }
             groupedCount.add(currCount);
-            searchedDates.add(currDate);
+            searchedDates.add(unsortedDatesString.get(i));
+            lastDate=unsortedDatesLong.get(i);
         }
-
+        xLabels=searchedDates;
         return groupedCount;
     }
-
 }
