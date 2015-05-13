@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.android.volley.Cache;
 import com.github.mikephil.charting.animation.Easing;
@@ -123,6 +124,23 @@ public class ModReport extends Fragment {
         barChart= (BarChart) view.findViewById(R.id.chart);
         Button btnDaily= (Button) view.findViewById(R.id.btn_daily);
         Button btnMonthly= (Button) view.findViewById(R.id.btn_monthly);
+        final LinearLayout chartContainer= (LinearLayout) view.findViewById(R.id.char_container);
+        final Button btnShowChart= (Button) view.findViewById(R.id.btn_show_chart);
+
+        btnShowChart.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(chartContainer.getVisibility() == View.GONE){
+                    chartContainer.setVisibility(View.VISIBLE);
+                    btnShowChart.setText(R.string.btn_hide_chart);
+                }
+                else if(chartContainer.getVisibility() == View.VISIBLE){
+                    chartContainer.setVisibility(View.GONE);
+                    btnShowChart.setText(R.string.btn_show_chart);
+                }
+            }
+        });
 
         btnDaily.setOnClickListener(new View.OnClickListener() {
             @Override

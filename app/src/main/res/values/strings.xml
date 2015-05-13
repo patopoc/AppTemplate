@@ -37,5 +37,7 @@
     <string name="lbl_avg_spm">Avg Smiles per Month</string>
     <string name="btn_daily">Diario</string>
     <string name="btn_monthly">Mensual</string>
+    <string name="btn_show_chart">Show Chart</string>
+    <string name="btn_hide_chart">Hide Chart</string>
 
 </resources>
