@@ -1,16 +1,21 @@
 package app.com.apptemplate.modules;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.utils.SessionControl;
+import app.com.apptemplate.widgets.WidgetProvider;
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass.
@@ -23,6 +28,7 @@ public class ModItemsDetail extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    final String TAG="ModItemsDetail";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -52,12 +58,14 @@ public class ModItemsDetail extends Fragment {
         // Required empty public constructor
     }
 
+    int modPosition=0;
+
     private SessionControl sessionControl;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sessionControl= new SessionControl(getActivity(),true);
-        int modPosition=0;
+        sessionControl= new SessionControl(getActivity(),false);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -74,10 +82,21 @@ public class ModItemsDetail extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank, container, false);
+        View view=inflater.inflate(R.layout.fragment_mod_items_detail, container, false);
+        Button button= (Button) view.findViewById(R.id.theButton);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent();
+                intent.setAction(WidgetProvider.ACTION_ANY);
+                getActivity().sendBroadcast(intent);
+                Log.d(TAG,"boradcast sent");
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -88,10 +107,18 @@ public class ModItemsDetail extends Fragment {
     }
 
     @Override
+    public void onResume(){
+        Log.d(TAG,"modPostion: "+modPosition);
+        ((AppMain) getActivity()).onSectionAttached(modPosition);
+        super.onResume();
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             mRedirectListener = (RedirectInterface) activity;
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -103,16 +130,5 @@ public class ModItemsDetail extends Fragment {
         super.onDetach();
         mRedirectListener = null;
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }

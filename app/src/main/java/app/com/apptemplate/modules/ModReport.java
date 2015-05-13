@@ -26,6 +26,7 @@ import com.github.mikephil.charting.data.Entry;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.utils.DataBaseHelper;
@@ -72,6 +73,7 @@ public class ModReport extends Fragment {
     public ModReport() {
         // Required empty public constructor
     }
+    int modPosition=0;
 
     private SessionControl sessionControl;
     private Cursor cursorData;
@@ -85,13 +87,12 @@ public class ModReport extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionControl= new SessionControl(getActivity(),false);
-        int modPosition=0;
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             modPosition= getArguments().getInt("modPosition");
-        }
 
+        }
         if(sessionControl.isRequireSession()){
             if(!sessionControl.checkSessionData()){
                 mRedirectListener.redirectToLogin(modPosition);
@@ -116,6 +117,12 @@ public class ModReport extends Fragment {
 
     }
 
+    @Override
+    public void onResume(){
+        Log.d(TAG,"modPostion: "+modPosition);
+        ((AppMain) getActivity()).onSectionAttached(modPosition);
+        super.onResume();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -206,6 +213,7 @@ public class ModReport extends Fragment {
         super.onAttach(activity);
         try {
             mRedirectListener = (RedirectInterface) activity;
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");

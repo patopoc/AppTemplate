@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import app.com.apptemplate.AppConf;
+import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.adapters.LugaresAdapter;
 import app.com.apptemplate.adapters.PlacesAdapter;
@@ -71,6 +72,7 @@ public class ModItemsMaster extends Fragment implements DataSetInterface{
     public ModItemsMaster() {
         // Required empty public constructor
     }
+    int modPosition=0;
 
     private SessionControl sessionControl;
     private RecyclerView mRecycleView;
@@ -82,7 +84,6 @@ public class ModItemsMaster extends Fragment implements DataSetInterface{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionControl= new SessionControl(getActivity(),false);
-        int modPosition=0;
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -140,10 +141,18 @@ public class ModItemsMaster extends Fragment implements DataSetInterface{
     }
 
     @Override
+    public void onResume(){
+        Log.d(TAG,"modPostion: "+modPosition);
+        ((AppMain) getActivity()).onSectionAttached(modPosition);
+        super.onResume();
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             mRedirectListener = (RedirectInterface) activity;
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");

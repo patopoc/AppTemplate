@@ -21,6 +21,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 import app.com.apptemplate.AppConf;
+import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.adapters.RecyclerAdapter;
 import app.com.apptemplate.interfaces.RedirectInterface;
@@ -71,13 +72,14 @@ public class ModImages extends Fragment {
         // Required empty public constructor
     }
 
+    int modPosition=0;
+
     private SessionControl sessionControl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionControl= new SessionControl(getActivity(),false);
-        int modPosition=0;
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -127,10 +129,18 @@ public class ModImages extends Fragment {
     }
 
     @Override
+    public void onResume(){
+        Log.d(TAG,"modPostion: "+modPosition);
+        ((AppMain) getActivity()).onSectionAttached(modPosition);
+        super.onResume();
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             mRedirectListener = (RedirectInterface) activity;
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");

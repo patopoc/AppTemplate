@@ -34,8 +34,9 @@ import app.com.apptemplate.utils.DataBaseHelper;
 public class WidgetProvider extends AppWidgetProvider {
     final String TAG="WidgetProvider";
 
-    public static String ACTION_UPDATE="ActionUpdate";
-    public static String ACTION_DELETE="ActionDelete";
+    public static String ACTION_UPDATE=".widgets.WidgetProvider.ACTION_UPDATE";
+    public static String ACTION_DELETE=".widgets.WidgetProvider.ACTION_DELETE";
+    public static String ACTION_ANY=".widgets.WidgetProvider.ACTION_ANY";
 
     @Override
     public void onEnabled(Context context){
@@ -111,7 +112,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
             Intent intentDelete = new Intent(context, AppMain.class);
             //intentDelete.setAction(ACTION_DELETE);
-            intentDelete.putExtra(AppMain.SELECT_FRAGMENT,2);
+            intentDelete.putExtra(AppMain.SELECT_FRAGMENT,3);
             PendingIntent pendingDelete= PendingIntent.getActivity(context,200,intentDelete,PendingIntent.FLAG_CANCEL_CURRENT);
 
             views.setOnClickPendingIntent(R.id.btn_widget_update, pendingUpdate);
@@ -128,7 +129,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent){
-
+        Log.d(TAG,"Action Received: "+intent.getAction());
         DataBaseHelper dbh= new DataBaseHelper(context);
         int count=0;
         if(intent.getAction().equals(ACTION_UPDATE)){
@@ -163,6 +164,10 @@ public class WidgetProvider extends AppWidgetProvider {
             }catch(Exception e){
                 Log.e(TAG,e.getMessage());
             }
+        }
+
+        else if(intent.getAction().equals(ACTION_ANY)){
+            Log.d(TAG,"que loco recibido intent ANY");
         }
         dbh.close();
 

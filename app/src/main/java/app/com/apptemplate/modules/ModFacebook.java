@@ -17,6 +17,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.utils.SessionControl;
@@ -62,13 +63,14 @@ public class ModFacebook extends Fragment {
         // Required empty public constructor
     }
 
+    int modPosition=0;
+
     private SessionControl sessionControl;
     private CallbackManager callbackManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionControl= new SessionControl(getActivity(),false);
-        int modPosition=0;
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -134,6 +136,8 @@ public class ModFacebook extends Fragment {
         super.onAttach(activity);
         try {
             mRedirectListener = (RedirectInterface) activity;
+            ((AppMain) activity).onSectionAttached(modPosition);
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");

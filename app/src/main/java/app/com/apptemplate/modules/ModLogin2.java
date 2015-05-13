@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.interfaces.RedirectInterface;
 
@@ -27,6 +29,7 @@ public class ModLogin2 extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    final String TAG="";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -128,10 +131,18 @@ public class ModLogin2 extends Fragment {
     }
 
     @Override
+    public void onResume(){
+        Log.d(TAG, "modPostion: " + modPosition);
+        ((AppMain) getActivity()).onSectionAttached(modPosition);
+        super.onResume();
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             mRedirectListener = (RedirectInterface) activity;
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");

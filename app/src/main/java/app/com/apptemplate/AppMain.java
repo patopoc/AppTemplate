@@ -18,6 +18,7 @@ import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.modules.ModBlank;
 import app.com.apptemplate.modules.ModFacebook;
 import app.com.apptemplate.modules.ModImages;
+import app.com.apptemplate.modules.ModItemsDetail;
 import app.com.apptemplate.modules.ModItemsMaster;
 import app.com.apptemplate.modules.ModLogin2;
 import app.com.apptemplate.modules.ModReport;
@@ -113,7 +114,7 @@ public class AppMain extends ActionBarActivity
                 modFragment= new ModBlank();
                 break;
             case 1:
-                modFragment= new ModImages();
+                modFragment= new ModItemsDetail();
                 break;
             case 2:
                 modFragment= new ModItemsMaster();
@@ -136,7 +137,7 @@ public class AppMain extends ActionBarActivity
     }
 
     public void onSectionAttached(int number) {
-        switch (number) {
+        /*switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
                 break;
@@ -146,7 +147,10 @@ public class AppMain extends ActionBarActivity
             case 3:
                 mTitle = getString(R.string.title_section3);
                 break;
-        }
+        }*/
+        mTitle= getResources().getStringArray(R.array.main_menu_items)[number];
+        Log.d(TAG,"current fragment "+number);
+        restoreActionBar();
     }
 
     public void restoreActionBar() {
