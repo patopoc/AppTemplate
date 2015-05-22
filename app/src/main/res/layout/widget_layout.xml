@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/widget_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="widgetito"/>
     <Button
         android:id="@+id/btn_widget_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="click me"/>
-    <Button
-        android:id="@+id/btn_widget_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reset"/>
+        android:background="@drawable/btn_count_selector" />
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/display_background"/>
+        <Button
+            android:id="@+id/btn_widget_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_display_selector"
+            android:layout_centerHorizontal="true"
+
+            android:layout_centerVertical="true"
+            android:textColor="#ffefeaea"
+            android:textSize="40sp" />
+
+        </RelativeLayout>
 </LinearLayout>

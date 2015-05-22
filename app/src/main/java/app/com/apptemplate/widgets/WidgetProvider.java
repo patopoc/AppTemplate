@@ -32,7 +32,7 @@ import app.com.apptemplate.utils.DataBaseHelper;
  * Created by steve on 05/05/2015.
  */
 public class WidgetProvider extends AppWidgetProvider {
-    final String TAG="WidgetProvider";
+    final static String TAG="WidgetProvider";
 
     public static String ACTION_UPDATE=".widgets.WidgetProvider.ACTION_UPDATE";
     public static String ACTION_DELETE=".widgets.WidgetProvider.ACTION_DELETE";
@@ -113,10 +113,10 @@ public class WidgetProvider extends AppWidgetProvider {
             Intent intentDelete = new Intent(context, AppMain.class);
             //intentDelete.setAction(ACTION_DELETE);
             intentDelete.putExtra(AppMain.SELECT_FRAGMENT,3);
-            PendingIntent pendingDelete= PendingIntent.getActivity(context,200,intentDelete,PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent pendingDisplay= PendingIntent.getActivity(context,200,intentDelete,PendingIntent.FLAG_CANCEL_CURRENT);
 
             views.setOnClickPendingIntent(R.id.btn_widget_update, pendingUpdate);
-            views.setOnClickPendingIntent(R.id.btn_widget_delete, pendingDelete);
+            views.setOnClickPendingIntent(R.id.btn_widget_display, pendingDisplay);
 
             appWidgetManager.updateAppWidget(appWidgetIds[0], views);
 
@@ -175,10 +175,10 @@ public class WidgetProvider extends AppWidgetProvider {
 
     }
 
-    public void updateViews(Context context, int count){
+    public static void updateViews(Context context, int count){
         RemoteViews views= new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        views.setTextViewText(R.id.widget_text, "valor: " + count);
-        views.setTextColor(R.id.widget_text, Color.RED);
+        views.setTextViewText(R.id.btn_widget_display, "" + count);
+        //views.setTextColor(R.id.widget_text, Color.RED);
 
         ComponentName thisWidget= new ComponentName(context, WidgetProvider.class);
         AppWidgetManager appWidgetManager= AppWidgetManager.getInstance(context);

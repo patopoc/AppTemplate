@@ -48,7 +48,7 @@ public class WidgetUpdateService extends IntentService {
                 cursor.moveToFirst();
                 count = cursor.getInt(0);
                 cursor.close();
-                updateViews(this);
+                WidgetProvider.updateViews(this,count);
 
             }catch(Exception e){
                 Log.e(TAG,e.getMessage());
@@ -62,7 +62,7 @@ public class WidgetUpdateService extends IntentService {
                 SQLiteDatabase database = dbh.getReadableDatabase();
                 int result= database.delete("smiles","1",null);
                 Log.d("WidgetProvider", "rows deleted: "+result);
-                updateViews(this);
+                WidgetProvider.updateViews(this,count);
 
             }catch(Exception e){
                 Log.e(TAG,e.getMessage());
@@ -70,14 +70,14 @@ public class WidgetUpdateService extends IntentService {
         }
     }
 
-    public void updateViews(Context context){
+    /*public void updateViews(Context context){
         RemoteViews views= new RemoteViews(this.getPackageName(), R.layout.widget_layout);
-        views.setTextViewText(R.id.widget_text, "valor: " + count);
-        views.setTextColor(R.id.widget_text, Color.RED);
+        views.setTextViewText(R.id.btn_widget_display, "" + count);
+        //views.setTextColor(R.id.widget_text, Color.RED);
 
         ComponentName thisWidget= new ComponentName(this, WidgetProvider.class);
         AppWidgetManager appWidgetManager= AppWidgetManager.getInstance(this);
         appWidgetManager.updateAppWidget(thisWidget,views);
         Log.d(TAG, "Widget updated");
-    }
+    }*/
 }
