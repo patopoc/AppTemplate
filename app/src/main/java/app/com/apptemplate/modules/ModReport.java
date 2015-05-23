@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.android.volley.Cache;
 import com.github.mikephil.charting.animation.Easing;
@@ -133,6 +135,7 @@ public class ModReport extends Fragment {
         Button btnMonthly= (Button) view.findViewById(R.id.btn_monthly);
         final LinearLayout chartContainer= (LinearLayout) view.findViewById(R.id.char_container);
         final Button btnShowChart= (Button) view.findViewById(R.id.btn_show_chart);
+        final ScrollView containerScroll= (ScrollView) view.findViewById(R.id.container_scrollable);
 
         btnShowChart.setOnClickListener(new View.OnClickListener() {
 
@@ -141,6 +144,13 @@ public class ModReport extends Fragment {
                 if(chartContainer.getVisibility() == View.GONE){
                     chartContainer.setVisibility(View.VISIBLE);
                     btnShowChart.setText(R.string.btn_hide_chart);
+                    containerScroll.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            containerScroll.scrollTo(0,chartContainer.getBottom());
+                        }
+                    });
+
                 }
                 else if(chartContainer.getVisibility() == View.VISIBLE){
                     chartContainer.setVisibility(View.GONE);

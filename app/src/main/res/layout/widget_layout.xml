@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/display_background">
 
     <Button
         android:id="@+id/btn_widget_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/btn_count_selector" />
-
-    <RelativeLayout
+        android:gravity="center_vertical"
+        android:background="@drawable/btn_count_selector"
+        android:layout_marginLeft="8dp"
+        android:layout_gravity="center_vertical"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_marginRight="8dp" />
+    <Button
+        android:id="@+id/btn_widget_display"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/display_background"/>
-        <Button
-            android:id="@+id/btn_widget_display"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_display_selector"
-            android:layout_centerHorizontal="true"
-
-            android:layout_centerVertical="true"
-            android:textColor="#ffefeaea"
-            android:textSize="40sp" />
-
-        </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_display_selector"
+        android:textColor="#ffefeaea"
+        android:textSize="30sp"
+        android:layout_gravity="center_vertical"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_marginRight="5dp" />
 </LinearLayout>
