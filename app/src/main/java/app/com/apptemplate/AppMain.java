@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.modules.ModBlank;
+import app.com.apptemplate.modules.ModConf;
 import app.com.apptemplate.modules.ModFacebook;
 import app.com.apptemplate.modules.ModImages;
 import app.com.apptemplate.modules.ModItemsDetail;
@@ -117,7 +118,7 @@ public class AppMain extends ActionBarActivity
                 modFragment= new ModItemsDetail();
                 break;
             case 2:
-                modFragment= new ModItemsMaster();
+                modFragment= new ModConf();
                 break;
             case 3:
                 modFragment= new ModReport();

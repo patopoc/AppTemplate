@@ -3,7 +3,7 @@
     <string-array name="main_menu_items">
         <item>ModBlank</item>
         <item>ModItemsDetail</item>
-        <item>ModItemsMaster</item>
+        <item>ModConf</item>
         <item>ModReport</item>
     </string-array>
 </resources>

@@ -40,4 +40,11 @@
     <string name="btn_show_chart">Show Chart</string>
     <string name="btn_hide_chart">Hide Chart</string>
 
+    <!--Conf -->
+    <string name="lbl_widget_conf">Widget Configuration</string>
+    <string name="btn_reset_counter">Reset Counter</string>
+    <string name="alert_message">El contador volvera a 0</string>
+    <string name="alert_yes">Yes</string>
+    <string name="alert_no">No</string>
+
 </resources>
