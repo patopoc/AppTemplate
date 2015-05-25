@@ -101,10 +101,13 @@ public class ModReport extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionControl= new SessionControl(getActivity(),false);
-        if(AppConf.navigation == AppConf.NavigationType.NONE)
+        if(AppConf.navigation == AppConf.NavigationType.NONE) {
             setHasOptionsMenu(true);
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -138,8 +141,6 @@ public class ModReport extends Fragment {
     @Override
     public void onResume(){
         Log.d(TAG, "modPostion: " + modPosition);
-        if(AppConf.navigation == AppConf.NavigationType.NONE)
-            getActivity().supportInvalidateOptionsMenu();
         ((AppMain) getActivity()).onSectionAttached(modPosition);
         super.onResume();
     }
@@ -243,8 +244,6 @@ public class ModReport extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //getActivity().supportInvalidateOptionsMenu();
-
         try {
             mRedirectListener = (RedirectInterface) activity;
 
