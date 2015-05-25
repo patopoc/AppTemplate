@@ -27,6 +27,7 @@
         <activity
             android:name=".AppMain"
             android:label="@string/title_activity_app_main"
+            android:noHistory="true"
             android:screenOrientation="portrait">
 
             <intent-filter>

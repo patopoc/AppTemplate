@@ -2,14 +2,22 @@ package app.com.apptemplate.modules;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,6 +38,7 @@ import com.google.android.gms.ads.AdView;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import app.com.apptemplate.AppConf;
 import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.interfaces.RedirectInterface;
@@ -86,11 +95,16 @@ public class ModReport extends Fragment {
     private BarChart barChart;
     private ArrayList<String> xLabels;
 
+    ShareActionProvider mShareActionProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sessionControl= new SessionControl(getActivity(),false);
+        if(AppConf.navigation == AppConf.NavigationType.NONE)
+            setHasOptionsMenu(true);
+
+        getActionBar().setDisplayHomeAsUpEnabled(false);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -123,7 +137,9 @@ public class ModReport extends Fragment {
 
     @Override
     public void onResume(){
-        Log.d(TAG,"modPostion: "+modPosition);
+        Log.d(TAG, "modPostion: " + modPosition);
+        if(AppConf.navigation == AppConf.NavigationType.NONE)
+            getActivity().supportInvalidateOptionsMenu();
         ((AppMain) getActivity()).onSectionAttached(modPosition);
         super.onResume();
     }
@@ -227,6 +243,8 @@ public class ModReport extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        //getActivity().supportInvalidateOptionsMenu();
+
         try {
             mRedirectListener = (RedirectInterface) activity;
 
@@ -285,5 +303,43 @@ public class ModReport extends Fragment {
         }
         xLabels=searchedDates;
         return groupedCount;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.app_main, menu);
+        if(AppConf.navigation == AppConf.NavigationType.NONE)
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+
+        setShareAction(menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.action_settings) {
+            Log.d(TAG, "clickeado Settings");
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private ActionBar getActionBar() {
+        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    private void setShareAction(Menu menu) {
+        MenuItem menuItem= menu.findItem(R.id.action_share);
+        mShareActionProvider= (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        Log.d(TAG,"mShared Created");
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+        Log.d(TAG,"actionProvider: "+mShareActionProvider);
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(sendIntent);
+        }
     }
 }

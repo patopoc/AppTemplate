@@ -4,7 +4,12 @@ package app.com.apptemplate;
  * Created by steve on 27/04/2015.
  */
 public class AppConf {
-    public static String navigationType="drawer"; //drawer, tab, viewpager, grid
+    public enum NavigationType{
+        NONE,DRAWER,TAB,VIEWPAGER,GRID
+    }
+
+
+    public static NavigationType navigation=NavigationType.NONE; //drawer, tab, viewpager, grid
     public static boolean acceptTwoPane=false;
 
     /*Network Comunication Details*/

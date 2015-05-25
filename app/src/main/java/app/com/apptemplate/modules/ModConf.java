@@ -7,12 +7,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import app.com.apptemplate.AppConf;
 import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.interfaces.RedirectInterface;
@@ -68,6 +76,9 @@ public class ModConf extends Fragment {
         super.onCreate(savedInstanceState);
         sessionControl= new SessionControl(getActivity(),false);
 
+        if(AppConf.navigation == AppConf.NavigationType.NONE)
+            setHasOptionsMenu(true);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -79,8 +90,6 @@ public class ModConf extends Fragment {
                 mRedirectListener.redirectToLogin(modPosition);
             }
         }
-
-
     }
 
     @Override
@@ -144,6 +153,38 @@ public class ModConf extends Fragment {
     public void onDetach() {
         super.onDetach();
         mRedirectListener = null;
+    }
+
+    private ActionBar getActionBar() {
+        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.global, menu);
+
+        if(AppConf.navigation == AppConf.NavigationType.NONE){
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.action_global_settings) {
+            Log.d(TAG, "clickeado Settings");
+        }
+        if(item.getItemId() == android.R.id.home){
+            FragmentManager manager= getActivity().getSupportFragmentManager();
+            FragmentTransaction transaction= manager.beginTransaction();
+            transaction.remove(this);
+            transaction.commit();
+            manager.popBackStack();
+        }
+            return super.onOptionsItemSelected(item);
     }
 
 }

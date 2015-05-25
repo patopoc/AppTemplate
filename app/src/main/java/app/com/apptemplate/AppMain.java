@@ -1,6 +1,5 @@
 package app.com.apptemplate;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -8,23 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.modules.ModBlank;
 import app.com.apptemplate.modules.ModConf;
-import app.com.apptemplate.modules.ModFacebook;
-import app.com.apptemplate.modules.ModImages;
 import app.com.apptemplate.modules.ModItemsDetail;
-import app.com.apptemplate.modules.ModItemsMaster;
 import app.com.apptemplate.modules.ModLogin2;
 import app.com.apptemplate.modules.ModReport;
 import app.com.apptemplate.navigation.NavigationDrawerFragment;
@@ -52,33 +44,35 @@ public class AppMain extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_main);
+        //setContentView(R.layout.activity_app_main_drawer);
 
         Bundle extras = getIntent().getExtras();
-        int defaultFragment=-1;
+        int defaultFragment=3;
 
         if(extras != null){
             defaultFragment= extras.getInt(SELECT_FRAGMENT,defaultFragment);
         }
 
 
-        if(AppConf.navigationType.equals("drawer")) {
+        if(AppConf.navigation == AppConf.NavigationType.DRAWER) {
+            setContentView(R.layout.activity_app_main_drawer);
             useNavigationDrawer();
         }
-        else if(AppConf.navigationType.equals("tab")){
+        else if(AppConf.navigation == AppConf.NavigationType.TAB){
 
         }
-        else if(AppConf.navigationType.equals("viewpager")){
+        else if(AppConf.navigation == AppConf.NavigationType.VIEWPAGER){
 
         }
-        else if(AppConf.navigationType.equals("grid")){
+        else if(AppConf.navigation == AppConf.NavigationType.GRID){
 
         }
-
-        if(defaultFragment != -1){
-            Log.d(TAG, "Setting default fragment");
-            setFragment(defaultFragment);
+        else if(AppConf.navigation == AppConf.NavigationType.NONE){
+            setContentView(R.layout.activity_app_main_none);
         }
+
+        setFragment(defaultFragment);
+
     }
 
     public void useNavigationDrawer(){
@@ -143,6 +137,15 @@ public class AppMain extends ActionBarActivity
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(fragmentManager.getBackStackEntryCount() > 1)
+            super.onBackPressed();
+        else
+            finish();
+    }
+
     public void onSectionAttached(int number) {
         /*switch (number) {
             case 1:
@@ -170,14 +173,20 @@ public class AppMain extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.app_main, menu);
-            restoreActionBar();
+        if(AppConf.navigation == AppConf.NavigationType.DRAWER) {
+            if (!mNavigationDrawerFragment.isDrawerOpen()) {
+                // Only show items in the action bar relevant to this screen
+                // if the drawer is not showing. Otherwise, let the drawer
+                // decide what to show in the action bar.
+                getMenuInflater().inflate(R.menu.app_main, menu);
+                restoreActionBar();
+            }
         }
-
+        else if(AppConf.navigation == AppConf.NavigationType.NONE){
+            //getMenuInflater().inflate(R.menu.app_main, menu);
+            //restoreActionBar();
+            return true;
+        }
         setShareAction(menu);
         return super.onCreateOptionsMenu(menu);
     }
