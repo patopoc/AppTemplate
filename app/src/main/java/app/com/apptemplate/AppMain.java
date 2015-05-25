@@ -1,11 +1,15 @@
 package app.com.apptemplate;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,6 +46,8 @@ public class AppMain extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
+    ShareActionProvider mShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,8 +176,9 @@ public class AppMain extends ActionBarActivity
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.app_main, menu);
             restoreActionBar();
-            return true;
         }
+
+        setShareAction(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -182,12 +189,28 @@ public class AppMain extends ActionBarActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Log.d(TAG,"selected: "+item.getItemId());
+        switch (id){
+            case R.id.action_settings:
+                setFragment(2);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setShareAction(Menu menu) {
+        MenuItem menuItem= menu.findItem(R.id.action_share);
+        mShareActionProvider= (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        Log.d(TAG,"mShared Created");
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+        Log.d(TAG,"actionProvider: "+mShareActionProvider);
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(sendIntent);
+        }
     }
 
 }
