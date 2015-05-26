@@ -2,9 +2,12 @@ package app.com.apptemplate.modules;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -150,8 +153,18 @@ public class ModReport extends Fragment {
         View view= inflater.inflate(R.layout.fragment_mod_report, container, false);
 
         AdView mAdView = (AdView) view.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+
+        ConnectivityManager connectivityManager= (ConnectivityManager) getActivity()
+                        .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo= connectivityManager.getActiveNetworkInfo();
+
+        if(networkInfo == null){
+            mAdView.setVisibility(View.GONE);
+        }
+        else{
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        }
 
         barChart= (BarChart) view.findViewById(R.id.chart);
         Button btnDaily= (Button) view.findViewById(R.id.btn_daily);

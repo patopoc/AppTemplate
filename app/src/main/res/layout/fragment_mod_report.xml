@@ -5,58 +5,157 @@
     android:layout_height="match_parent"
     android:background="#fffaedf8"
     android:id="@+id/container_scrollable">
-
 <LinearLayout
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:text="@string/lbl_status_bar"
-        android:textSize="20dp" />
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
     <LinearLayout
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/status_bar_bg"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp">
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_daily_status"
+                android:textSize="20dp" />
+            <TextView
+                android:id="@+id/lbl_recommendation"
+                android:text="this is the recommendation"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
         <ImageView
-            android:id="@+id/status_face"
+            android:id="@+id/img_status"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+
     </LinearLayout>
-    <TextView
-        android:id="@+id/lbl_recomendation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:background="@drawable/text_container_border"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp">
+        <TextView
+            android:id="@+id/lbl_std"
+            android:text="@string/lbl_std"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size" />
+        <TextView
+            android:id="@+id/txt_std_val"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="9999"
+            android:textSize="@dimen/text_size"
+            android:gravity="right" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_container_border"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp">
+        <TextView
+            android:id="@+id/lbl_stw"
+            android:text="@string/lbl_stw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textSize="@dimen/text_size" />
+        <TextView
+            android:id="@+id/txt_stw_val"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="9999"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size"
+            android:gravity="right" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_container_border"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp">
+        <TextView
+            android:id="@+id/lbl_stm"
+            android:text="@string/lbl_stm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textSize="@dimen/text_size" />
+        <TextView
+            android:id="@+id/txt_stm_val"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="9999"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size"
+            android:gravity="right" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:background="@drawable/text_container_border"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp">
         <TextView
             android:id="@+id/lbl_aspd"
             android:text="@string/lbl_avg_spd"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_size" />
         <TextView
             android:id="@+id/txt_aspd_val"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="9999"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size"
             android:gravity="right" />
 
     </LinearLayout>
@@ -65,23 +164,25 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content"
         android:background="@drawable/text_container_border"
-        android:layout_margin="20dp"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp">
         <TextView
             android:id="@+id/lbl_aspw"
             android:text="@string/lbl_avg_spw"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_size" />
         <TextView
             android:id="@+id/txt_aspw_val"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="9999"
             android:layout_weight="1"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size"
             android:gravity="right" />
 
     </LinearLayout>
@@ -90,23 +191,25 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content"
         android:background="@drawable/text_container_border"
-        android:layout_margin="20dp"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp">
         <TextView
             android:id="@+id/lbl_aspm"
             android:text="@string/lbl_avg_spm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:textSize="20sp" />
+            android:textSize="@dimen/text_size" />
         <TextView
             android:id="@+id/txt_aspm_val"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="9999"
             android:layout_weight="1"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size"
             android:gravity="right" />
 
     </LinearLayout>
@@ -156,13 +259,5 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"/>
     </LinearLayout>
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id">
-    </com.google.android.gms.ads.AdView>
 </LinearLayout>
 </ScrollView>
