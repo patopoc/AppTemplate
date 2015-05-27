@@ -57,7 +57,6 @@ public class WidgetUpdateService extends IntentService {
         }
         else if(action.equals("delete")){
             try {
-                Log.d(TAG,"entro aqui que m...");
                 dbh.createDataBase();
                 SQLiteDatabase database = dbh.getReadableDatabase();
                 int result= database.delete("smiles","1",null);
@@ -69,15 +68,4 @@ public class WidgetUpdateService extends IntentService {
             }
         }
     }
-
-    /*public void updateViews(Context context){
-        RemoteViews views= new RemoteViews(this.getPackageName(), R.layout.widget_layout);
-        views.setTextViewText(R.id.btn_widget_display, "" + count);
-        //views.setTextColor(R.id.widget_text, Color.RED);
-
-        ComponentName thisWidget= new ComponentName(this, WidgetProvider.class);
-        AppWidgetManager appWidgetManager= AppWidgetManager.getInstance(this);
-        appWidgetManager.updateAppWidget(thisWidget,views);
-        Log.d(TAG, "Widget updated");
-    }*/
 }

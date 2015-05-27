@@ -37,6 +37,7 @@ public class WidgetProvider extends AppWidgetProvider {
     public static String ACTION_UPDATE=".widgets.WidgetProvider.ACTION_UPDATE";
     public static String ACTION_DELETE=".widgets.WidgetProvider.ACTION_DELETE";
     public static String ACTION_ANY=".widgets.WidgetProvider.ACTION_ANY";
+    public static String ACTION_SUBTRACT=".widgets.WidgetProvider.ACTION_SUBTRACT";
 
     @Override
     public void onEnabled(Context context){
@@ -44,7 +45,16 @@ public class WidgetProvider extends AppWidgetProvider {
         DataBaseHelper dbh= new DataBaseHelper(context);
         try {
             dbh.createDataBase();
+            int count=0;
+            dbh.createDataBase();
+            SQLiteDatabase database= dbh.getReadableDatabase();
+            Cursor cursor=database.rawQuery("select count(date) from smiles",null);
+            cursor.moveToFirst();
+            count= cursor.getInt(0);
+            cursor.close();
+            updateViews(context, count);
             dbh.close();
+
         }catch(Exception e){
 
         }
@@ -74,35 +84,6 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
 
         try {
-            /*dbh.createDataBase();
-            SQLiteDatabase database= dbh.getReadableDatabase();
-            ContentValues val= new ContentValues();
-            val.put("date",System.currentTimeMillis()/1000);
-            database.insert("smiles",null,val);
-            Log.d("WidgetProvider","row inserted");
-            Cursor cursor=database.rawQuery("select count(date) from smiles",null);
-            cursor.moveToFirst();
-            count= cursor.getInt(0);
-            cursor.close();
-
-            Log.d("WidgetProviedr", "value: " + getDate(System.currentTimeMillis()));
-
-            /*for (int i = 0; i < appWidgetIds.length; i++) {
-                int appWidgetID = appWidgetIds[i];
-                RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-
-                views.setTextViewText(R.id.widget_text, "valor: " + count);
-                views.setTextColor(R.id.widget_text, Color.RED);
-
-                Intent intent = new Intent(context, WidgetProvider.class);
-                intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                views.setOnClickPendingIntent(R.id.button_widget, pendingIntent);
-
-                appWidgetManager.updateAppWidget(appWidgetID, views);
-            }*/
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
@@ -166,8 +147,22 @@ public class WidgetProvider extends AppWidgetProvider {
             }
         }
 
-        else if(intent.getAction().equals(ACTION_ANY)){
-            Log.d(TAG,"que loco recibido intent ANY");
+        else if(intent.getAction().equals(ACTION_SUBTRACT)){
+            try {
+                dbh.createDataBase();
+                SQLiteDatabase database= dbh.getReadableDatabase();
+                database.delete("smiles", "id in(select id from smiles order by id desc limit 1)", null);
+                Log.d("WidgetProvider","row deleted");
+                Cursor cursor=database.rawQuery("select count(date) from smiles",null);
+                cursor.moveToFirst();
+                count= cursor.getInt(0);
+                cursor.close();
+
+                updateViews(context, count);
+
+            }catch(Exception e){
+                Log.e("WidgetProvider",e.getMessage());
+            }
         }
         dbh.close();
 
@@ -178,7 +173,6 @@ public class WidgetProvider extends AppWidgetProvider {
     public static void updateViews(Context context, int count){
         RemoteViews views= new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setTextViewText(R.id.btn_widget_display, "" + count);
-        //views.setTextColor(R.id.widget_text, Color.RED);
 
         ComponentName thisWidget= new ComponentName(context, WidgetProvider.class);
         AppWidgetManager appWidgetManager= AppWidgetManager.getInstance(context);

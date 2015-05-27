@@ -31,7 +31,7 @@
     <string name="facebook_app_id">1645675518987334</string>
 
     <!--Report  -->
-    <string name="lbl_daily_status">Daily Happiness Level</string>
+    <string name="lbl_daily_status">Daily Smiles Level</string>
     <string name="lbl_std">Smiles this Day</string>
     <string name="lbl_stw">Smiles this Week</string>
     <string name="lbl_stm">Smiles this Month</string>
@@ -45,8 +45,10 @@
     <string name="btn_hide_chart">Hide Chart</string>
 
     <!--Conf -->
-    <string name="lbl_widget_conf">Widget Configuration</string>
+    <string name="lbl_widget_conf">Counter Configuration</string>
+    <string name="txt_counter_val_prefix">Smiles:</string>
     <string name="btn_reset_counter">Reset Counter</string>
+    <string name="btn_subtract_counter">Subtract 1</string>
     <string name="alert_message">The Counter Will Be Set To 0</string>
     <string name="alert_yes">Yes</string>
     <string name="alert_no">No</string>

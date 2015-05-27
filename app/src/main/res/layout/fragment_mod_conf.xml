@@ -30,13 +30,35 @@
         android:background="#55aa55"
         ></View>
 
-    <Button
-        android:id="@+id/btn_reset_counter"
+    <TextView
+        android:id="@+id/lbl_counter_val"
+        android:textSize="30sp"
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_reset_counter"
-        android:background="@drawable/btn_shape_selector"
-        android:textColor="#fffffbfa"
-        android:layout_margin="10dp" />
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btn_reset_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_reset_counter"
+            android:background="@drawable/btn_shape_selector"
+            android:textColor="#fffffbfa"
+            android:layout_margin="10dp" />
+        <Button
+            android:id="@+id/btn_subtract_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btn_subtract_counter"
+            android:background="@drawable/btn_shape_selector"
+            android:textColor="#fffffbfa"
+            android:layout_margin="10dp" />
+    </LinearLayout>
+
 </LinearLayout>
 </ScrollView>

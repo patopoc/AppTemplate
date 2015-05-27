@@ -6,4 +6,28 @@
         <item>ModConf</item>
         <item>ModReport</item>
     </string-array>
+
+    <string-array name="status0">
+        <item>you are not laughing enough</item>
+        <item>Cmon why the sad face</item>
+    </string-array>
+    <string-array name="status1">
+        <item>you could laugh a little bit more</item>
+        <item>Cmon look something funny</item>
+        <item>Forget everything they say look something funny</item>
+    </string-array>
+    <string-array name="status2">
+        <item>Yes that is much better</item>
+        <item>You are starting engines</item>
+    </string-array>
+    <string-array name="status3">
+        <item>Whoa! how funny this could be, doesn\'t it</item>
+        <item>Yes youre having a blast</item>
+    </string-array>
+    <string-array name="status4">
+        <item>Oh my!, that\'s so contagious</item>
+        <item>Yes this is what the life is supposed to be</item>
+        <item>LFMAO!</item>
+    </string-array>
+
 </resources>

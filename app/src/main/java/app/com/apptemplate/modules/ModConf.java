@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,11 +21,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import app.com.apptemplate.AppConf;
 import app.com.apptemplate.AppMain;
 import app.com.apptemplate.R;
 import app.com.apptemplate.interfaces.RedirectInterface;
+import app.com.apptemplate.utils.DataBaseHelper;
 import app.com.apptemplate.utils.SessionControl;
 import app.com.apptemplate.widgets.WidgetProvider;
 
@@ -71,6 +77,7 @@ public class ModConf extends Fragment {
     int modPosition=0;
 
     private SessionControl sessionControl;
+    TextView mCounterVal;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +111,10 @@ public class ModConf extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_mod_conf, container, false);
         Button btnReset= (Button) view.findViewById(R.id.btn_reset_counter);
+        Button btnSubtract= (Button) view.findViewById(R.id.btn_subtract_counter);
+        mCounterVal= (TextView) view.findViewById(R.id.lbl_counter_val);
+        mCounterVal.setText(getString(R.string.txt_counter_val_prefix)+ " "  + getCountFromDB());
+
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +122,31 @@ public class ModConf extends Fragment {
             }
         });
 
+        btnSubtract.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteFromDB("id in(select id from smiles order by id desc limit 1)");
+            }
+        });
+
         return view;
+    }
+
+    private int getCountFromDB(){
+        int count=0;
+        DataBaseHelper dbh= new DataBaseHelper(getActivity());
+        try {
+            dbh.createDataBase();
+            SQLiteDatabase database= dbh.getReadableDatabase();
+            Cursor cursorData=database.rawQuery("select count(date) from smiles",null);
+            cursorData.moveToFirst();
+            count= cursorData.getInt(0);
+            cursorData.close();
+
+        }catch(Exception e){
+            Log.e("WidgetProvider",e.getMessage());
+        }
+        return count;
     }
 
     public void showAlert(){
@@ -121,13 +156,33 @@ public class ModConf extends Fragment {
                 .setPositiveButton(R.string.alert_yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent= new Intent();
-                        intent.setAction(WidgetProvider.ACTION_DELETE);
-                        getActivity().sendBroadcast(intent);
+                        deleteFromDB(null);
                     }
                 })
                 .setNegativeButton(R.string.alert_no,null)
                 .show();
+    }
+
+
+    private void deleteFromDB(String where){
+        DataBaseHelper dbh= new DataBaseHelper(getActivity());
+        int count=0;
+        try {
+            dbh.createDataBase();
+            SQLiteDatabase database= dbh.getReadableDatabase();
+            database.delete("smiles", where, null);
+            Log.d("WidgetProvider","row deleted");
+            Cursor cursor=database.rawQuery("select count(date) from smiles",null);
+            cursor.moveToFirst();
+            count= cursor.getInt(0);
+            cursor.close();
+            mCounterVal.setText(getString(R.string.txt_counter_val_prefix)+ " " + count);
+            WidgetProvider.updateViews(getActivity(), count);
+
+        }catch(Exception e){
+            Log.e("WidgetProvider",e.getMessage());
+        }
+        dbh.close();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -24,8 +24,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.android.volley.Cache;
 import com.github.mikephil.charting.animation.Easing;
@@ -40,6 +42,7 @@ import com.google.android.gms.ads.AdView;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Random;
 
 import app.com.apptemplate.AppConf;
 import app.com.apptemplate.AppMain;
@@ -93,7 +96,7 @@ public class ModReport extends Fragment {
 
     private SessionControl sessionControl;
     private Cursor cursorData;
-    private ArrayList<String> unsortedDatesString;
+    //private ArrayList<String> unsortedDatesString;
     private ArrayList<Long> unsortedDatesLong;
     private BarChart barChart;
     private ArrayList<String> xLabels;
@@ -122,7 +125,9 @@ public class ModReport extends Fragment {
                 mRedirectListener.redirectToLogin(modPosition);
             }
         }
+    }
 
+    private void getDataFromDB(){
         DataBaseHelper dbh= new DataBaseHelper(getActivity());
         try {
             dbh.createDataBase();
@@ -138,7 +143,6 @@ public class ModReport extends Fragment {
         }catch(Exception e){
             Log.e("WidgetProvider",e.getMessage());
         }
-
     }
 
     @Override
@@ -151,9 +155,7 @@ public class ModReport extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_mod_report, container, false);
-
         AdView mAdView = (AdView) view.findViewById(R.id.adView);
-
         ConnectivityManager connectivityManager= (ConnectivityManager) getActivity()
                         .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo= connectivityManager.getActiveNetworkInfo();
@@ -165,6 +167,7 @@ public class ModReport extends Fragment {
             AdRequest adRequest = new AdRequest.Builder().build();
             mAdView.loadAd(adRequest);
         }
+        getDataFromDB();
 
         barChart= (BarChart) view.findViewById(R.id.chart);
         Button btnDaily= (Button) view.findViewById(R.id.btn_daily);
@@ -210,18 +213,65 @@ public class ModReport extends Fragment {
         });
 
         setChartData("dd/MM/yyyy");
+
+        setSmileStatus(view, getCountDate(System.currentTimeMillis(),"dd/MM/yyyy"));
+        TextView txtStdVal= (TextView) view.findViewById(R.id.txt_std_val);
+        TextView txtStwVal= (TextView) view.findViewById(R.id.txt_stw_val);
+        TextView txtStmVal= (TextView) view.findViewById(R.id.txt_stm_val);
+        TextView txtAspdVal= (TextView) view.findViewById(R.id.txt_aspd_val);
+        TextView txtAspwVal= (TextView) view.findViewById(R.id.txt_aspw_val);
+        TextView txtAspmVal= (TextView) view.findViewById(R.id.txt_aspm_val);
+
+        txtStdVal.setText(""+getCountDate(System.currentTimeMillis(),"dd/MM/yyyy"));
+        txtStwVal.setText(""+getCountDate(System.currentTimeMillis(),"w/yyyy"));
+        txtStmVal.setText(""+getCountDate(System.currentTimeMillis(),"MM/yyyy"));
+        txtAspdVal.setText(""+getCountAvg("dd/MM/yyyy"));
+        txtAspwVal.setText(""+getCountAvg("w/yyyy"));
+        txtAspmVal.setText(""+getCountAvg("MM/yyyy"));
+
         return view;
     }
 
+    private void setSmileStatus(View view, int smilesCount){
+        ImageView imgStatus= (ImageView) view.findViewById(R.id.img_status);
+        TextView recommendation= (TextView) view.findViewById(R.id.lbl_recommendation);
+        Random randomRecom= new Random();
+        if(smilesCount < 2){
+            imgStatus.setImageResource(R.drawable.status0);
+            String[] recom= getResources().getStringArray(R.array.status0);
+            recommendation.setText(recom[randomRecom.nextInt(recom.length)]);
+        }
+        else if(smilesCount < 4){
+            imgStatus.setImageResource(R.drawable.status1);
+            String[] recom= getResources().getStringArray(R.array.status1);
+            recommendation.setText(recom[randomRecom.nextInt(recom.length)]);
+        }
+        else if(smilesCount < 6){
+            imgStatus.setImageResource(R.drawable.status2);
+            String[] recom= getResources().getStringArray(R.array.status2);
+            recommendation.setText(recom[randomRecom.nextInt(recom.length)]);
+        }
+        else if(smilesCount < 8){
+            imgStatus.setImageResource(R.drawable.status3);
+            String[] recom= getResources().getStringArray(R.array.status3);
+            recommendation.setText(recom[randomRecom.nextInt(recom.length)]);
+        }
+        else if(smilesCount > 10){
+            imgStatus.setImageResource(R.drawable.status4);
+            String[] recom= getResources().getStringArray(R.array.status4);
+            recommendation.setText(recom[randomRecom.nextInt(recom.length)]);
+        }
+    }
+
     private void setChartData(String orderFormat){
-        unsortedDatesString=null;
-        unsortedDatesString= new ArrayList<>();
+        //unsortedDatesString=null;
+        ArrayList<String> unsortedDatesString= new ArrayList<>();
         for(long dateStamp : unsortedDatesLong){
             unsortedDatesString.add(TimeHelper.getDate(dateStamp,orderFormat));
         }
 
         xLabels= new ArrayList<>();
-        ArrayList<Integer> data= getGroupCount();
+        ArrayList<Integer> data= getGroupCount(unsortedDatesString);
 
         ArrayList<BarEntry> dataEntries= new ArrayList<BarEntry>();
 
@@ -272,7 +322,7 @@ public class ModReport extends Fragment {
         mRedirectListener = null;
     }
 
-    private ArrayList<Integer> getGroupCount(){
+    private ArrayList<Integer> getGroupCount(ArrayList<String> unsortedDatesString){
         ArrayList<String> searchedDates= new ArrayList<String>();
         ArrayList<Integer> groupedCount= new ArrayList<>();
         long lastDate=0;
@@ -315,6 +365,57 @@ public class ModReport extends Fragment {
         }
         xLabels=searchedDates;
         return groupedCount;
+    }
+
+    private int getCountDate(long timestamp, String format){
+        int count=0;
+        String currDate= TimeHelper.getDate(timestamp, format);
+        for(long date : unsortedDatesLong){
+            if(TimeHelper.getDate(date,format).equals(currDate)){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private int getCountAvg(String groupFormat){
+        int avg=0;
+        int totals=0;
+        ArrayList<String> searchedDates= new ArrayList<String>();
+        ArrayList<Integer> groupedCount= new ArrayList<>();
+        ArrayList<String> unsortedDatesString= new ArrayList<>();
+
+        for(long dateStamp : unsortedDatesLong){
+            unsortedDatesString.add(TimeHelper.getDate(dateStamp,groupFormat));
+        }
+
+        for(int i=0; i< unsortedDatesString.size(); i++){
+            //Log.d(TAG,unsortedDatesString.get(i));
+            boolean skipDate=false;
+            //check if date was already searched
+            for(String sd : searchedDates){
+                if(unsortedDatesString.get(i).equals(sd)){
+                    skipDate=true;
+                }
+            }
+            if(skipDate)
+                continue;
+
+            int currCount=0;
+            for(String date : unsortedDatesString){
+                if(date.equals(unsortedDatesString.get(i)))
+                    currCount ++;
+            }
+            groupedCount.add(currCount);
+            searchedDates.add(unsortedDatesString.get(i));
+        }
+        for(Integer subTotal : groupedCount){
+            totals+= subTotal;
+        }
+        if(groupedCount.size() > 0)
+            avg= totals / groupedCount.size();
+
+        return avg;
     }
 
     @Override
