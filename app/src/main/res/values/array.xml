@@ -3,8 +3,8 @@
     <string-array name="main_menu_items">
         <item>ModBlank</item>
         <item>ModItemsDetail</item>
-        <item>ModConf</item>
-        <item>ModReport</item>
+        <item>Settings</item>
+        <item>Report</item>
     </string-array>
 
     <string-array name="status0">

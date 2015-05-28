@@ -160,6 +160,8 @@ public class ModConf extends Fragment {
                     }
                 })
                 .setNegativeButton(R.string.alert_no,null)
+                .setMessage("")
+
                 .show();
     }
 
@@ -217,7 +219,7 @@ public class ModConf extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        inflater.inflate(R.menu.global, menu);
+        //inflater.inflate(R.menu.global, menu);
 
         if(AppConf.navigation == AppConf.NavigationType.NONE){
             getActionBar().setDisplayHomeAsUpEnabled(true);

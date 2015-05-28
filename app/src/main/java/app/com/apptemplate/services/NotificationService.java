@@ -41,13 +41,13 @@ public class NotificationService extends IntentService {
             cursor.moveToFirst();
             long lastSmileDate= cursor.getLong(0);
             if(enableDailyNotification){
-                //if(lastSmileDate + (AppConf.notificationDays * 3600000) < System.currentTimeMillis()){
-                if(lastSmileDate + 120000 < System.currentTimeMillis()){
-                    sendNotification("Hoy no hiciste click hoy loco!",this, AppMain.class,2);
+                if(lastSmileDate + (AppConf.notificationDays * 3600000) < System.currentTimeMillis()){
+                //if(lastSmileDate + 120000 < System.currentTimeMillis()){
+                    sendNotification(getResources().getString(R.string.notification_message),this, AppMain.class,3);
                 }
-                else{
-                    sendNotification("hiciste ra'e click hoy loco!",this, AppMain.class,2);
-                }
+                /*else{
+                    sendNotification("hiciste ra'e click hoy loco!",this, AppMain.class,3);
+                }*/
             }
             if(enableWeeklyNotification){
 

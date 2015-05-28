@@ -1,6 +1,10 @@
 package app.com.apptemplate;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,6 +16,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.view.SubMenu;
+
+import com.facebook.TestUserManager;
 
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.modules.ModBlank;
@@ -53,6 +60,22 @@ public class AppMain extends ActionBarActivity
             defaultFragment= extras.getInt(SELECT_FRAGMENT,defaultFragment);
         }
 
+        SharedPreferences preferences= getSharedPreferences("widgetConf",Context.MODE_PRIVATE);
+        boolean widgetEnabled= preferences.getBoolean("widgetEnabled",false);
+        if(!widgetEnabled){
+            new AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.enable_widget_help))
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .show();
+        }
+
+        Log.d(TAG,"DISPLAY DENSITY: "+getResources().getDisplayMetrics().density);
 
         if(AppConf.navigation == AppConf.NavigationType.DRAWER) {
             setContentView(R.layout.activity_app_main_drawer);
@@ -140,7 +163,7 @@ public class AppMain extends ActionBarActivity
     @Override
     public void onBackPressed(){
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if(fragmentManager.getBackStackEntryCount() > 1)
+        if(fragmentManager.getBackStackEntryCount() > 2)
             super.onBackPressed();
         else
             finish();

@@ -1,9 +1,8 @@
 <resources>
-    <string name="app_name">AppTemplate</string>
+    <string name="app_name">Smile Counter</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_app_main">AppMain</string>
+    <string name="title_activity_app_main">Smile Counter</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -15,17 +14,18 @@
 
     <string name="action_example">Example action</string>
 
-<!-- TODO: Remove or change this placeholder text -->
     <string name="login_title">Iniciar Sesion</string>
     <string name="login_user">Usuario</string>
     <string name="login_pass">Contraseña</string>
     <string name="login_btnLogin">Ingresar</string>
     <string name="login_message"></string>
 
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Ui strings-->
     <string name="loading_message">Cargando, espere!</string>
+
+    <!--Notification  -->
+    <string name="notification_message">Haven\'t you smiled today yet</string>
 
     <!--Social Networks -->
     <string name="facebook_app_id">1645675518987334</string>
@@ -55,4 +55,7 @@
 
     <!-- Ads -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <!-- Help -->
+    <string name="enable_widget_help">Put the Smile Counter Widget on your Home Screen and enjoy yourself counting the happy moments :)</string>
 </resources>
