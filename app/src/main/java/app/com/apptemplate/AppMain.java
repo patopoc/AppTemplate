@@ -18,8 +18,6 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.SubMenu;
 
-import com.facebook.TestUserManager;
-
 import app.com.apptemplate.interfaces.RedirectInterface;
 import app.com.apptemplate.modules.ModBlank;
 import app.com.apptemplate.modules.ModConf;
